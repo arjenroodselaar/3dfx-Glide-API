@@ -1,0 +1,1 @@
+docker run --rm -i -t -v %cd%:/home/workspace/glide 3dfx bash 

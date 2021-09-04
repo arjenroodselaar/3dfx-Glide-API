@@ -35,8 +35,6 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     -DCVG 
     -DGLIDE_PLUG 
     -DGLIDE_SPLASH 
-    -G6 
-    -O2 
     -DGL_MMX 
     -DGL_AMD3D 
     -DGL_X86

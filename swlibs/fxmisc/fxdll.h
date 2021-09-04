@@ -69,7 +69,11 @@
 
       #define FX_EXPORT
       #define FX_CSTYLE __stdcall __export
-
+    #elif defined(__GNUC__)
+      #define FX_ENTRY
+      #define FX_CALL
+      #define FX_EXPORT
+      #define FX_CSTYLE
     #else /* compiler */
       #error define FX_ENTRY,FX_CALL & FX_EXPORT,FX_CSTYLE for your compiler
     #endif /* compiler */
