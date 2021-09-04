@@ -1,0 +1,65 @@
+name: Build Glide3x Library (Linux X64)
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows or Mac.  You can convert this to a matrix build if you need
+    # cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "glide3x/cvg"
+    container:
+      image: 'danaozhong/3dfx_glide_dev_env_linux_x64:latest'
+      
+    env:
+      # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+      BUILD_TYPE: Debug
+  
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Create Artifact Directory
+      run: |
+        mkdir -p ${{ github.workspace }}/artifacts
+        
+    - name: Generate FXGasm Tool
+      working-directory: "glide3x/cvg/glide3/src/"
+      run: |
+        mkdir -p fxgasm_tool/bin
+        cd fxgasm_tool/bin
+        cmake ..
+        cmake --build .
+        
+    - name: Generate Header Files
+      working-directory: "glide3x/cvg/glide3/src/"
+      run: |
+        ./fxgasm_tool/bin/fxgasm -inline > fxinline.h
+        ./fxgasm_tool/bin/fxgasm -hex > fxgasm.h
+
+    - name: Generate Glide3x Dynamic Link Library
+      run: |
+        mkdir bin
+        cd bin
+        cmake ..
+        cmake --build .
+        ls -la
+        cp *.so ${{ github.workspace }}/artifacts/
+        cd ${{ github.workspace }}/artifacts/
+        ls -la
+        
+    - name: Upload Built Glide3x Library
+      uses: actions/upload-artifact@v2
+      with:
+        name: glide3x
+        path: artifacts/
+        
+        
