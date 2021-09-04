@@ -116,7 +116,7 @@
 #  include <malloc.h>
 #endif
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #  include <windows.h>
 #endif
 

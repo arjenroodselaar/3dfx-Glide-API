@@ -313,10 +313,10 @@ static GrTexDownloadProc _texDownloadProcs[][2][4] =
       _grTexDownload_3DNow_MMX,
       _grTexDownload_3DNow_MMX,
     },
-  }
+  },
 #endif /* GL_AMD3D */
 #if GL_MMX
-  ,{ 
+  { 
     { 
       _grTexDownload_Default_8_1, 
       _grTexDownload_Default_8_2, 

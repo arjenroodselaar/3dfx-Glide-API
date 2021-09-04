@@ -27,14 +27,14 @@
 %elifdef __linux__
 %define XOS XOS_LINUX
 %define ELFTYPE 1
-%elifdef __WIN32__
+%elifdef WIN32
 %define XOS XOS_WIN32
 %define STDCALL 1
 %elifdef __WATCOMD__
 %define XOS XOS_WATCD
 %define STDCALL 1
 %else
-%error Unknown OS
+%error "Unknown OS"
 %endif
 
 ;---------------------------------------

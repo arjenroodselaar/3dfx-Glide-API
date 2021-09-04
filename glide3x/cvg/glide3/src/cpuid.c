@@ -68,6 +68,7 @@ typedef unsigned int word32;
  * TEST_MMXPLUS   = emms | pminsw mm0, mm0 | emms
  */
 #ifdef __GNUC__
+// GCC
 #define TEST_CPUID(f)    __asm __volatile ("pushl %%ebx; cpuid; popl %%ebx"::"a"(f):"%ecx", "%edx")
 #define TEST_SSE()       __asm __volatile (".byte 0x0f, 0x57, 0xc0")
 #define TEST_SSE2()      __asm __volatile (".byte 0x66, 0x0f, 0x57, 0xc0")
@@ -76,6 +77,18 @@ typedef unsigned int word32;
 #define TEST_3DNOWPLUS() __asm __volatile (".byte 0x0f, 0x0e, 0x0f, 0x0f, 0xc0, 0xbb, 0x0f, 0x0e")
 #define TEST_MMXPLUS()   __asm __volatile (".byte 0x0f, 0x77, 0x0f, 0xea, 0xc0, 0x0f, 0x77")
 #else
+// Windows
+#if defined _WIN32 || defined _WIN64
+#if _WIN64
+// 64 bit systems probably support everything, just hardcode everything
+#define TEST_CPUID(f)    return 1
+#define TEST_SSE()       return 1
+#define TEST_SSE2()      return 1 // there is no 64 CPU that does not support SSE2
+#define TEST_3DNOW()     return 0 // no longer supported on modern CPUs
+#define TEST_MMX()       return 1
+#define TEST_3DNOWPLUS() return 0
+#define TEST_MMXPLUS()   return 1
+#else
 #define TEST_CPUID(f)    __asm { _asm mov eax, f _asm cpuid }
 #define TEST_SSE()       __asm { _asm _emit 0x0f _asm _emit 0x57 _asm _emit 0xc0 }
 #define TEST_SSE2()      __asm { _asm _emit 0x66 _asm _emit 0x0f _asm _emit 0x57 _asm _emit 0xc0 }
@@ -83,6 +96,8 @@ typedef unsigned int word32;
 #define TEST_MMX()       __asm { _asm _emit 0x0f _asm _emit 0x77 }
 #define TEST_3DNOWPLUS() __asm { _asm _emit 0x0f _asm _emit 0x0e _asm _emit 0x0f _asm _emit 0x0f _asm _emit 0xc0 _asm _emit 0xbb _asm _emit 0x0f _asm _emit 0x0e }
 #define TEST_MMXPLUS()   __asm { _asm _emit 0x0f _asm _emit 0x77 _asm _emit 0x0f _asm _emit 0xea _asm _emit 0xc0 _asm _emit 0x0f _asm _emit 0x77 }
+#endif
+#endif /* defined _WIN32 || defined _WIN64 */
 #endif
 
 
@@ -202,6 +217,7 @@ int _cpuid (_p_info *pinfo)
  }
 
 #ifdef __GNUC__
+// GCC 
  __asm("\n\
 	/* get the vendor string */	\n\
 	pushl	%%ebx			\n\
@@ -235,6 +251,11 @@ int _cpuid (_p_info *pinfo)
  ":"=g"(dwExt), "=g"(dwId), "=g"(dwFeature),
    "=g"(((word32 *)Ident)[0]), "=g"(((word32 *)Ident)[1]), "=g"(((word32 *)Ident)[2])
  ::"%eax", "%ecx", "%edx");
+#else
+// MSVC
+#ifdef _WIN64
+    // hardcode support for MMX and SSE/SSE2, if running on x64 systems
+    dwFeature = _MMX_FEATURE_BIT | _MMXPLUS_FEATURE_BIT | _SSE_FEATURE_BIT | _SSE2_FEATURE_BIT;
 #else
     _asm
     {
@@ -270,9 +291,8 @@ notamd:
         pop edx
     }
 #endif
+#endif
 
-#ifndef __WATCOMC__
- /* stupid watcom does not sigill... */
  if (dwFeature & _MMX_FEATURE_BIT) {
     feature |= _CPU_FEATURE_MMX;
     os_support |= has_feature(_CPU_FEATURE_MMX);
@@ -297,7 +317,6 @@ notamd:
     feature |= _CPU_FEATURE_SSE2;
     os_support |= has_feature(_CPU_FEATURE_SSE2);
  }
-#endif
 
  if (pinfo) {
     memset(pinfo, 0, sizeof(_p_info));

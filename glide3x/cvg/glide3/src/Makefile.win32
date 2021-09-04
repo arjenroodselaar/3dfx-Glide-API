@@ -291,16 +291,8 @@ xdraw3_3dnow.obj: xdraw3.asm
 xtexdl_3dnow.obj: xtexdl.asm
 	$(AS) -o $@ $(ASFLAGS) -DGL_AMD3D=1 $<
 
-$(GLIDE_OBJECTS): fxinline.h fxgasm.h
+# $(GLIDE_OBJECTS): fxinline.h fxgasm.h
 
-fxinline.h: fxgasm.exe
-	.\$< -inline > $@
-
-fxgasm.h: fxgasm.exe
-	.\$< -hex > $@
-
-fxgasm.exe: fxgasm.c
-	$(CC) -o $@ $(CFLAGS) $<
 
 ###############################################################################
 #	clean, realclean
