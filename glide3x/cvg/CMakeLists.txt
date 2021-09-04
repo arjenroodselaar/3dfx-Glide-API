@@ -62,8 +62,6 @@ endif()
 set(GLIDE_OUTSIDE_SOURCES
     ${CMAKE_SOURCE_DIR}/glide3/src/digutex.c
     ${NEWPCI_LIB_DIR}/fxpci.c
-    ${NEWPCI_LIB_DIR}/fxw32.c
-    ${NEWPCI_LIB_DIR}/fxvxd.c
     ${NEWPCI_LIB_DIR}/fxnt.c
     ${NEWPCI_LIB_DIR}/fxmsr.c
     ${CMAKE_SOURCE_DIR}/init/canopus.c
@@ -80,9 +78,30 @@ set(GLIDE_OUTSIDE_SOURCES
     ${CMAKE_SOURCE_DIR}/init/fxremap.c
 )
 
+# platform specific compile files
+set(WINDOWS_DEPENDENCIES
+    ${NEWPCI_LIB_DIR}/fxw32.c
+    ${NEWPCI_LIB_DIR}/fxvxd.c
+)
+
+set(LINUX_DEPENDENCIES
+    ${NEWPCI_LIB_DIR}/fxlinux.c
+)
+
+if(MSVC)
+    set(GLIDE_OUTSIDE_SOURCES ${GLIDE_SOURCES}
+       ${WINDOWS_DEPENDENCIES} 
+    )
+else()
+    set(GLIDE_OUTSIDE_SOURCES ${GLIDE_SOURCES}
+       ${LINUX_DEPENDENCIES} 
+    )
+endif()
+
 # Create a shared library 
 add_library(${CMAKE_PROJECT_NAME} SHARED 
     ${GLIDE_SOURCES}
+    
     ${GLIDE_OUTSIDE_SOURCES}
     ${GLIDE_ASM_SOURCE})
 
@@ -100,7 +119,7 @@ if(MSVC)
   # disable all warnings for now (too many)
   target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE /W0)
 else()
-  target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
+  target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC

@@ -12,8 +12,11 @@ cmake --build .
 popd
 
 # use fxgasm to generate the headers
-./fxgasm_tool/bin/Debug/fxgasm -inline > fxinline.h
-./fxgasm_tool/bin/Debug/fxgasm -hex > fxgasm.h
+# one of these variants works on windows, the other one on linux
+./fxgasm_tool/bin/Debug/fxgasm -inline > fxinline.h || true
+./fxgasm_tool/bin/Debug/fxgasm -hex > fxgasm.h || true
+./fxgasm_tool/bin/fxgasm -inline > fxinline.h || true
+./fxgasm_tool/bin/fxgasm -hex > fxgasm.h || true
 
 # go back to initial directory
 popd
