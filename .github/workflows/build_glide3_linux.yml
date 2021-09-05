@@ -52,14 +52,11 @@ jobs:
         cmake ..
         cmake --build .
         ls -la
-        cp *.so ${{ github.workspace }}/artifacts/
-        cd ${{ github.workspace }}/artifacts/
-        ls -la
         
     - name: Upload Built Glide3x Library
       uses: actions/upload-artifact@v2
       with:
         name: glide3x
-        path: artifacts/
+        path: glide3x/cvg/bin/*.so
         
         
