@@ -20,6 +20,8 @@ RUN apt-get install -y --no-install-recommends \
     gcc \
     tar \
     nasm \
+    gcc-multilib \
+    mingw-w64 \
     ca-certificates
 
 RUN apt-get autoclean 

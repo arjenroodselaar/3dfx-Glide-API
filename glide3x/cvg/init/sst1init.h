@@ -136,7 +136,7 @@ p6Fence(void);
       "xchg eax, p6FenceVar" \
       modify [eax];
 #  define P6FENCE p6Fence()
-#elif defined(__MSC__) || defined(_WIN32)
+#elif defined(_MSC_VER) // Visual Studio compiler
 #  if defined(_M_X64) || defined(__amd64__)
 // TODO Clemens: ASM not supported on x64
 #    define P6FENCE

@@ -45,18 +45,41 @@ jobs:
         ./fxgasm_tool/bin/fxgasm -inline > fxinline.h
         ./fxgasm_tool/bin/fxgasm -hex > fxgasm.h
 
-    - name: Generate Glide3x Dynamic Link Library
+    - name: Generate Glide3x Dynamic Link Library (Linux, x64)
       run: |
-        mkdir bin
-        cd bin
+        mkdir bin_x64
+        cd bin_x64
         cmake ..
         cmake --build .
-        ls -la
+        
+    - name: Generate Glide3x Dynamic Link Library (Linux, x32)
+      run: |
+        mkdir bin_x32
+        cd bin_x32
+        cmake -DBUILD_32BIT=ON ..
+        cmake --build .
+        
+    - name: Generate Glide3x Dynamic Link Library (Windows, x64)
+      run: |
+        mkdir bin_win_x64
+        cd bin_win_x64
+        cmake -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_64.cmake -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
+        cmake --build .
+
+    - name: Generate Glide3x Dynamic Link Library (Windows, x32)
+      run: |
+        mkdir bin_win_x32
+        cd bin_win_x32
+        cmake -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_32.cmake -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
+        cmake --build .
         
     - name: Upload Built Glide3x Library
       uses: actions/upload-artifact@v2
       with:
         name: glide3x
-        path: glide3x/cvg/bin/*.so
-        
+        path: |
+            glide3x/cvg/bin_x32/*.so
+            glide3x/cvg/bin_x64/*.so
+            glide3x/cvg/bin_win_x64/*.dll
+            glide3x/cvg/bin_win_x32/*.dll
         
