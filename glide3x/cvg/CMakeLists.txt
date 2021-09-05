@@ -2,6 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT(Glide3x VERSION 1.0 DESCRIPTION "Template solution by Clemens Zangl" LANGUAGES C ASM_NASM)
 
+OPTION(BUILD_32BIT "Build for 32-bit targets (default is x64" OFF)
 OPTION(USE_X86 "Buld for x86 target" ON)
 OPTION(USE_3DNOW "Support 3DNow" OFF)
 
@@ -62,7 +63,6 @@ endif()
 set(GLIDE_OUTSIDE_SOURCES
     ${CMAKE_SOURCE_DIR}/glide3/src/digutex.c
     ${NEWPCI_LIB_DIR}/fxpci.c
-    ${NEWPCI_LIB_DIR}/fxnt.c
     ${NEWPCI_LIB_DIR}/fxmsr.c
     ${CMAKE_SOURCE_DIR}/init/canopus.c
     ${CMAKE_SOURCE_DIR}/init/dac.c
@@ -80,6 +80,7 @@ set(GLIDE_OUTSIDE_SOURCES
 
 # platform specific compile files
 set(WINDOWS_DEPENDENCIES
+    ${NEWPCI_LIB_DIR}/fxnt.c
     ${NEWPCI_LIB_DIR}/fxw32.c
     ${NEWPCI_LIB_DIR}/fxvxd.c
 )
@@ -88,12 +89,12 @@ set(LINUX_DEPENDENCIES
     ${NEWPCI_LIB_DIR}/fxlinux.c
 )
 
-if(MSVC)
-    set(GLIDE_OUTSIDE_SOURCES ${GLIDE_SOURCES}
+if(WIN32)
+    set(GLIDE_OUTSIDE_SOURCES ${GLIDE_OUTSIDE_SOURCES}
        ${WINDOWS_DEPENDENCIES} 
     )
 else()
-    set(GLIDE_OUTSIDE_SOURCES ${GLIDE_SOURCES}
+    set(GLIDE_OUTSIDE_SOURCES ${GLIDE_OUTSIDE_SOURCES}
        ${LINUX_DEPENDENCIES} 
     )
 endif()
@@ -154,5 +155,14 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     -DGLIDE_USE_C_TRISETUP
 )
 
+if (${BUILD_32BIT})
+    if(MSVC)
+        set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+    else()
+        set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
+    endif()
+    
+    #target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -m32)
+endif()
 
 #gcc -o fxgasm -Wall -I. -I../../incsrc -I../../init -I../../../swlibs/fxmisc -I../../../swlibs/newpci/pcilib -I../../../swlibs/fxmemmap #-I../../../swlibs/texus2/lib -DGLIDE3 -DGLIDE3_ALPHA -DGLIDE_HW_TRI_SETUP=1 -DGLIDE_PACKED_RGB=0 -DGLIDE_PACKET3_TRI_SETUP=1 -DGLIDE_TRI_CULLING=1# -DUSE_PACKET_FIFO=1 -DGLIDE_DISPATCH_SETUP -DGLIDE_DISPATCH_DOWNLOAD -DGLIDE_CHIP_BROADCAST=1 -DGLIDE_BLIT_CLEAR=1 -DCVG -DGL_MMX -DGL_AMD3D -DGL_X86 -O1 -ffast-math fxgasm.c
