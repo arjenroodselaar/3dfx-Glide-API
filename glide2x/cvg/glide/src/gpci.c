@@ -665,11 +665,11 @@ _GlideInitEnvironment(void)
   GDBG_INIT();                          /* init the GDEBUG libraray */
   GDBG_INFO(80,"%s()\n", FN_NAME);
 
-#ifdef __WIN32__
+#ifdef _WIN32
   grErrorSetCallback(_grErrorWindowsCallback);
 #else
   grErrorSetCallback(_grErrorDefaultCallback);
-#endif /* __WIN32__ */
+#endif /* _WIN32 */
 
 #ifdef GLIDE_DEBUG
   GDBG_INFO(0,"GLIDE DEBUG LIBRARY\n"); /* unconditional display */

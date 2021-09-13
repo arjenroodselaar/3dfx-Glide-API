@@ -58,7 +58,7 @@ myGetenv(const char* envKey)
 {
   FxBool callRealGetenvP = FXTRUE;
 
-#if __WIN32__
+#if _WIN32
   /* NB: If were being called from cya code in
    * DllMain(DLL_PROCESS_DETACH) because the current app has called
    * exit() or dropped off of the end of main the per dll environ
@@ -74,7 +74,7 @@ myGetenv(const char* envKey)
                        GetExitCodeProcess(curProcessHandle, &exitCode) &&
                        (exitCode == STILL_ACTIVE));
   }
-#endif /* __WIN32__ */
+#endif /* _WIN32 */
 
   return (callRealGetenvP
           ? getenv(envKey)
@@ -106,7 +106,7 @@ MyDebugPrintf(FILE* outputFile, const char* fmtString, ...)
 #endif /* !DIRECTX */
 
     va_start(args, fmtString);
-#if __WIN32__
+#if _WIN32
     {
       char msgBuf[256];
 

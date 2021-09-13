@@ -28,13 +28,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if __WIN32__
+#if _WIN32
 #include <windows.h>
 
 /* Path relative to HKEY_LOCAL_MACHINE */
 #define REGSTR_PATH_3DFXSW              "Software\\3Dfx Interactive\\Voodoo2"
 #define REGSTR_PATH_GLIDE               REGSTR_PATH_3DFXSW"\\Glide"
-#endif /* __WIN32__ */
+#endif /* _WIN32 */
 
 #include <3dfx.h>
 #include <cvgregs.h>
@@ -346,7 +346,7 @@ __errExit:
 }
 #endif
 
-#if defined(INIT_DOS) || defined(INIT_LINUX) || defined(__WIN32__)
+#if defined(INIT_DOS) || defined(INIT_LINUX) || defined(_WIN32)
 
 #if TEST
 /* void main(int argc, char **argv) */
@@ -1023,7 +1023,7 @@ static void sst1InitToLower(char *string)
     }
 }
 
-#if __WIN32__
+#if _WIN32
 static
 FxBool GetRegistryKey(HKEY hKey, const char* keyName, 
                       char* regValBuf, FxU32 bufSize)
@@ -1050,14 +1050,14 @@ FxBool GetRegistryKey(HKEY hKey, const char* keyName,
   
   return retVal;
 } 
-#endif /* __WIN32__ */
+#endif /* _WIN32 */
 
 static const char*
 myGetenv(const char* envKey)
 {
   FxBool callRealGetenvP = FXTRUE;
 
-#if __WIN32__
+#if _WIN32
   /* NB: If were being called from cya code in
    * DllMain(DLL_PROCESS_DETACH) because the current app has called
    * exit() or dropped off of the end of main the per dll environ
@@ -1073,7 +1073,7 @@ myGetenv(const char* envKey)
                        GetExitCodeProcess(curProcessHandle, &exitCode) &&
                        (exitCode == STILL_ACTIVE));
   }
-#endif /* __WIN32__ */
+#endif /* _WIN32 */
 
   return (callRealGetenvP
           ? getenv(envKey)
@@ -1100,7 +1100,7 @@ FX_ENTRY char* FX_CALL sst1InitGetenv(char *string)
    */
   retVal = myGetenv(string);
   if (retVal == NULL) {
-#if __WIN32__
+#if _WIN32
     /* On windows check to see if the control panel thingee
      * has added entries for glide or voodoo^2.
      */
@@ -1126,7 +1126,7 @@ FX_ENTRY char* FX_CALL sst1InitGetenv(char *string)
         }
       }
     }
-#endif /* __WIN32__ */
+#endif /* _WIN32 */
   
     /* Does the requested environment variable exist in "voodoo2.ini"? */
     /* Dump CFG Data... */

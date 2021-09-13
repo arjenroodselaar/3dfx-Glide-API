@@ -72,7 +72,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#if defined(__WIN32__)
+#if defined(_WIN32)
 #include <windows.h>
 #endif
 
