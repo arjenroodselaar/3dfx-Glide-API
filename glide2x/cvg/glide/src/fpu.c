@@ -9,7 +9,10 @@
 #if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86)
 void single_precision_asm()
 {
-#if defined(__MSC__)
+#if defined _WIN64 || defined __x86_64__
+/* Just empty stub */
+#else /* defined _WIN64 || defined __x86_64__ */
+#if defined(_MSC_VER)
   __asm {
     push  eax       ; make room
     fnclex          ; clear pending exceptions
@@ -32,9 +35,10 @@ void single_precision_asm()
 #else
 #error "Need to implement single_precision_asm() for this compiler"
 #endif
+#endif /* #if defined _WIN64 || defined __x86_64__ */
 }
 #else
-#warning "Using a stub for single_precision_asm() for this architecture"
+#pragma message("Using a stub for single_precision_asm() for this architecture")
 void single_precision_asm()
 {
 }
@@ -47,7 +51,10 @@ void single_precision_asm()
 #if defined(__i386__) || defined(__x86_64__) || defined(_M_IX86)
 void double_precision_asm()
 {
-#if defined(__MSC__)
+#if defined _WIN64 || defined __x86_64__
+/* Just empty stub */
+#else /*defined _WIN64 || defined __x86_64__ */
+#if defined(_MSC_VER)
   __asm {
     push  eax       ; make room
     fnclex          ; clear pending exceptions
@@ -72,9 +79,10 @@ void double_precision_asm()
 #else
 #error "Need to implement double_precision_asm() for this compiler"
 #endif
+#endif /*defined _WIN64 || defined __x86_64__ */
 }
 #else
-#warning "Using a stub for double_precision_asm() for this architecture"
+#pragma message("Using a stub for double_precision_asm() for this architecture")
 void double_precision_asm()
 {
 }

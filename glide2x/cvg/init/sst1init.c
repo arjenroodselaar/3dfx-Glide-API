@@ -164,7 +164,7 @@
 #include <sst1init.h>
 #include "rcver.h"
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -330,7 +330,7 @@ FX_EXPORT FxU32 * FX_CSTYLE sst1InitMapBoardDirect(FxU32 BoardNumber,
             } else {
                 FxU32 code = pciGetErrorCode();
                 if (code != PCI_ERR_NOERR) {
-#ifdef __WIN32__
+#ifdef _WIN32
                   MessageBox(NULL, pciGetErrorString(), NULL, MB_OK);
                   INIT_PRINTF(("sst1InitMapBoard(): 0x%X\n", GetLastError()));
 #endif

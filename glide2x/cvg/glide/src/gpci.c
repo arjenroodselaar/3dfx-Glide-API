@@ -264,19 +264,19 @@ static GrTriSetupProc _triSetupProcs[][1][2] =
 {
   /* Default Procs */
   {
-    {_trisetup, _trisetup_cull}
+    {trisetup, trisetup_cull}
 #if GLIDE_PACKED_RGB
-   ,{_trisetup_rgb, _trisetup_cull_rgb},
-    {_trisetup_argb, _trisetup_cull_argb}
+   ,{trisetup_rgb, trisetup_cull_rgb},
+    {trisetup_argb, trisetup_cull_argb}
 #endif /* GLIDE_PACKED_RGB */
   },
 #if GL_AMD3D
   /* 3DNow!(tm) Procs */
  {
-    {_trisetup_3DNow, _trisetup_cull_3DNow}
+    {trisetup_3DNow, trisetup_cull_3DNow}
 #if GLIDE_PACKED_RGB
-   ,{_trisetup_rgb_3DNow, _trisetup_cull_rgb_3DNow},
-    {_trisetup_argb_3DNow, _trisetup_cull_argb_3DNow}
+   ,{trisetup_rgb_3DNow, trisetup_cull_rgb_3DNow},
+    {trisetup_argb_3DNow, trisetup_cull_argb_3DNow}
 #endif /* GLIDE_PACKED_RGB */
   },
 #endif /* GL_AMD3D */
@@ -665,11 +665,11 @@ _GlideInitEnvironment(void)
   GDBG_INIT();                          /* init the GDEBUG libraray */
   GDBG_INFO(80,"%s()\n", FN_NAME);
 
-#ifdef __WIN32__
+#ifdef _WIN32
   grErrorSetCallback(_grErrorWindowsCallback);
 #else
   grErrorSetCallback(_grErrorDefaultCallback);
-#endif /* __WIN32__ */
+#endif /* _WIN32 */
 
 #ifdef GLIDE_DEBUG
   GDBG_INFO(0,"GLIDE DEBUG LIBRARY\n"); /* unconditional display */

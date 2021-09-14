@@ -64,8 +64,8 @@
 ;;; Definitions of cvg regs and glide root structures.
 %include "fxgasm.h"
 
-extrn   _GlideRoot
-extrn   _FifoMakeRoom, 12
+extrn   __GlideRoot
+extrn   __FifoMakeRoom, 12
 
 %MACRO GR_FIFO_WRITE 3
     mov     [%1 + %2], %3
@@ -90,7 +90,7 @@ extrn   _FifoMakeRoom, 12
 segment		SEG_DATA
     One         DD  1.0
     Area        DD  0
-%IF GLIDE_PACKED_RGB
+%ifdef GLIDE_PACKED_RGB
     bias0       DD  0
     bias1       DD  0
 %ENDIF
@@ -141,7 +141,7 @@ PROC_TYPE _trisetup_cull
 
 endp
 
-%IF GLIDE_PACKED_RGB
+%ifdef GLIDE_PACKED_RGB
 
             ALIGN 32
 PROC_TYPE _trisetup_cull_rgb
@@ -189,7 +189,7 @@ PROC_TYPE _trisetup
 
 endp
 
-%IF GLIDE_PACKED_RGB
+%ifdef GLIDE_PACKED_RGB
 
             ALIGN 32
 PROC_TYPE _trisetup_rgb

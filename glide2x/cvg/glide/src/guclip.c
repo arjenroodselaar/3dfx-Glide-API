@@ -322,7 +322,8 @@ GR_DIENTRY(guDrawTriangleWithClip, void,
   /*
    ** snap vertices then decompose the n-gon into triangles
    */
-#if defined ( __WATCOMC__ ) || defined ( __MSC__ ) || defined(__DJGPP__) || \
+   /* Clemens Zangl 2021-09-13 add support for Visual Studio 2019 */
+#if defined ( __WATCOMC__ ) || defined ( __MSC__ ) || defined(__DJGPP__) || defined(_MSC_VER) || \
   defined(__GNUC__) || defined(__MWERKS__)
   for ( i = 0; i < outlength; i++ ) {
     output_array2[i].x += vertex_snap_constant;
@@ -391,7 +392,7 @@ GR_DIENTRY(guAADrawTriangleWithClip, void,
   /*
    ** snap vertices then decompose the n-gon into triangles
    */
-#if defined(__WATCOMC__) || defined(__MSC__) || defined (__DJGPP__) || \
+#if defined(__WATCOMC__) || defined(__MSC__) || defined (__DJGPP__) || defined(_MSC_VER) || \
   defined(__GNUC__) || defined(__MWERKS__)
   for ( i = 0; i < outlength; i++ ) {
     output_array2[i].x += vertex_snap_constant;
@@ -434,7 +435,7 @@ GR_DIENTRY(guDrawPolygonVertexListWithClip, void,
   /*
    ** snap vertices then decompose the n-gon into triangles
    */
-#if defined(__WATCOMC__) || defined(__MSC__) || defined(__DJGPP__) || \
+#if defined(__WATCOMC__) || defined(__MSC__) || defined(__DJGPP__) || defined(_MSC_VER) || \
   defined(__GNUC__) || defined(__MWERKS__)
   for ( i = 0; i < outlength; i++ ) {
     output_array2[i].x += vertex_snap_constant;

@@ -27,7 +27,7 @@
 ** compilation:
 **
 **            __DOS__           Defined for 32-bit DOS applications
-**            __WIN32__         Defined for 32-bit Windows applications
+**            _WIN32         Defined for 32-bit Windows applications
 **            __sparc__         Defined for Sun Solaris/SunOS
 **            __linux__         Defined for Linux applications
 **            __IRIX__          Defined for SGI Irix applications
@@ -468,9 +468,13 @@ typedef FxU32 GrCoordinateSpaceMode_t;
 #ifdef GLIDE_LIB
 typedef struct _GrState_s GrState;
 #else
-typedef struct _GrState_s {
+/* Clemens get this compiling */
+typedef struct _GrState_s GrState;
+/*
+    typedef struct _GrState_s {
   char pad[GLIDE_STATE_PAD_SIZE];
 } GrState;
+*/
 #endif
 
 #ifdef GLIDE3

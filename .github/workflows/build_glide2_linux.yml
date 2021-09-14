@@ -1,4 +1,4 @@
-name: Build Glide3x Library (Linux X64)
+name: Build Glide2x Library (Linux X64)
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "glide3x/cvg"
+        working-directory: "glide2x/cvg"
     container:
       image: 'danaozhong/3dfx_glide_dev_env_linux_x64:latest'
       
@@ -32,7 +32,7 @@ jobs:
         mkdir -p ${{ github.workspace }}/artifacts
         
     - name: Generate FXGasm Tool
-      working-directory: "glide3x/cvg/glide3/src/"
+      working-directory: "glide2x/cvg/glide/src/"
       run: |
         mkdir -p fxgasm_tool/bin
         cd fxgasm_tool/bin
@@ -40,46 +40,46 @@ jobs:
         cmake --build .
         
     - name: Generate Header Files
-      working-directory: "glide3x/cvg/glide3/src/"
+      working-directory: "glide2x/cvg/glide/src/"
       run: |
         ./fxgasm_tool/bin/fxgasm -inline > fxinline.h
         ./fxgasm_tool/bin/fxgasm -hex > fxgasm.h
 
-    - name: Generate Glide3x Dynamic Link Library (Linux, x64)
+    - name: Generate Glide2x Dynamic Link Library (Linux, x64)
       run: |
         mkdir bin_x64
         cd bin_x64
         cmake ..
         cmake --build .
         
-    - name: Generate Glide3x Dynamic Link Library (Linux, x32)
+    - name: Generate Glide2x Dynamic Link Library (Linux, x32)
       run: |
         mkdir bin_x32
         cd bin_x32
         cmake -DBUILD_32BIT=ON ..
         cmake --build .
         
-    - name: Generate Glide3x Dynamic Link Library (Windows, x64)
+    - name: Generate Glide2x Dynamic Link Library (Windows, x64)
       run: |
         mkdir bin_win_x64
         cd bin_win_x64
         cmake -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_64.cmake -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
         cmake --build .
 
-    - name: Generate Glide3x Dynamic Link Library (Windows, x32)
+    - name: Generate Glide2x Dynamic Link Library (Windows, x32)
       run: |
         mkdir bin_win_x32
         cd bin_win_x32
-        cmake -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_32.cmake -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
+        cmake -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_32.cmake -DBUILD_32BIT=ON -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
         cmake --build .
         
-    - name: Upload Built Glide3x Library
+    - name: Upload Built Glide2x Library
       uses: actions/upload-artifact@v2
       with:
-        name: glide2x
+        name: glide3x
         path: |
-            glide3x/cvg/bin_x32/*.so
-            glide3x/cvg/bin_x64/*.so
-            glide3x/cvg/bin_win_x64/*.dll
-            glide3x/cvg/bin_win_x32/*.dll
+            glide2x/cvg/bin_x32/*.so
+            glide2x/cvg/bin_x64/*.so
+            glide2x/cvg/bin_win_x64/*.dll
+            glide2x/cvg/bin_win_x32/*.dll
         

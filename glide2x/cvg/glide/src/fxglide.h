@@ -537,25 +537,25 @@ typedef GrTriSetupProcVector GrTriSetupProcArchVector[1];
 /* Decalrations of the dispatchable procs found in xdraw2.asm and
  * xtexdl.c for teh triangle and texture download procs respectively.  
  */
-extern FxI32 FX_CALL _trisetup(const void*, const void*, const void*);
-extern FxI32 FX_CALL _trisetup_cull(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_cull(const void*, const void*, const void*);
 
 #if GLIDE_PACKED_RGB
-extern FxI32 FX_CALL _trisetup_rgb(const void*, const void*, const void*);
-extern FxI32 FX_CALL _trisetup_cull_rgb(const void*, const void*, const void*);
-extern FxI32 FX_CALL _trisetup_argb(const void*, const void*, const void*);
-extern FxI32 FX_CALL _trisetup_cull_argb(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_rgb(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_cull_rgb(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_argb(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_cull_argb(const void*, const void*, const void*);
 #endif /* GLIDE_PACKED_RBG */
 
 #if GL_AMD3D
-extern FxI32 FX_CALL _trisetup_3DNow(const void*, const void*, const void*);
-extern FxI32 FX_CALL _trisetup_cull_3DNow(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_3DNow(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_cull_3DNow(const void*, const void*, const void*);
 
 #if GLIDE_PACKED_RGB
-extern FxI32 FX_CALL _trisetup_rgb_3DNow(const void*, const void*, const void*);
-extern FxI32 FX_CALL _trisetup_cull_rgb_3DNow(const void*, const void*, const void*);
-extern FxI32 FX_CALL _trisetup_argb_3DNow(const void*, const void*, const void*);
-extern FxI32 FX_CALL _trisetup_cull_argb_3DNow(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_rgb_3DNow(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_cull_rgb_3DNow(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_argb_3DNow(const void*, const void*, const void*);
+extern FxI32 FX_CALL trisetup_cull_argb_3DNow(const void*, const void*, const void*);
 #endif /* GLIDE_PACKED_RBG */
 #endif /* GL_AMD3D */
 
