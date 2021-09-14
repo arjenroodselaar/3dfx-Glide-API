@@ -25,7 +25,7 @@
   -------------------------------------------------------------------*/
 #ifdef GLIDE_USE_C_TRISETUP
 FxI32 FX_CSTYLE
-_trisetup_cull(const void *va, const void *vb, const void *vc)
+trisetup_cull(const void *va, const void *vb, const void *vc)
 {
 #define FN_NAME "_vptrisetup_cull"
   GR_BEGIN_NOFIFOCHECK(FN_NAME, 90);
@@ -102,7 +102,7 @@ _trisetup_cull(const void *va, const void *vb, const void *vc)
  **  the starting point.
  **
  */
-GR_DDFUNC(_trisetup,
+GR_DDFUNC(trisetup,
           FxI32,
           (const void *va, const void *vb, const void *vc))
 {
@@ -522,22 +522,22 @@ __triDrawn:
 
 
 
-FxI32 FX_CSTYLE _trisetup_rgb(const void* va, const void* vb, const void* vc)
+FxI32 FX_CSTYLE trisetup_rgb(const void* va, const void* vb, const void* vc)
 {
-    return _trisetup_cull(va, vb, vc);
+    return trisetup_cull(va, vb, vc);
 }
 
-FxI32 FX_CSTYLE _trisetup_cull_rgb(const void* va, const void* vb, const void* vc)
+FxI32 FX_CSTYLE trisetup_cull_rgb(const void* va, const void* vb, const void* vc)
 {
-    return _trisetup_cull(va, vb, vc);
+    return trisetup_cull(va, vb, vc);
 }
 
-FxI32 FX_CSTYLE _trisetup_argb(const void* va, const void* vb, const void* vc)
+FxI32 FX_CSTYLE trisetup_argb(const void* va, const void* vb, const void* vc)
 {
-    return _trisetup_cull(va, vb, vc);
+    return trisetup_cull(va, vb, vc);
 }
 
-FxI32 FX_CSTYLE _trisetup_cull_argb(const void* va, const void* vb, const void* vc)
+FxI32 FX_CSTYLE trisetup_cull_argb(const void* va, const void* vb, const void* vc)
 {
-    return _trisetup_cull(va, vb, vc);
+    return trisetup_cull(va, vb, vc);
 }

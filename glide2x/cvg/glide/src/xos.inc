@@ -29,10 +29,10 @@
 ;---------------------------------------
 %ifdef __DJGPP__
 %define XOS XOS_DJGPP
-%elifdef __linux__
+%elifdef _NASM_BUILD_FOR_LINUX
 %define XOS XOS_LINUX
 %define ELFTYPE 1
-%elifdef __WIN32__
+%elifdef _NASM_BUILD_FOR_WIN32
 %define XOS XOS_WIN32
 %define STDCALL 1
 %elifdef __WATCOMD__

@@ -1,4 +1,4 @@
-name: Build Glide3x Library (Linux X64)
+name: Build Glide2x Library (Linux X64)
 
 on:
   push:
@@ -70,10 +70,10 @@ jobs:
       run: |
         mkdir bin_win_x32
         cd bin_win_x32
-        cmake -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_32.cmake -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
+        cmake -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_32.cmake -DBUILD_32BIT=ON -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
         cmake --build .
         
-    - name: Upload Built Glide3x Library
+    - name: Upload Built Glide2x Library
       uses: actions/upload-artifact@v2
       with:
         name: glide3x

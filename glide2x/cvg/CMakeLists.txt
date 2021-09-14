@@ -2,9 +2,49 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT(Glide2x VERSION 1.0 DESCRIPTION "Template solution by Clemens Zangl" LANGUAGES C ASM_NASM)
 
-OPTION(BUILD_32BIT "Build for 32-bit targets (default is x64" OFF)
-OPTION(USE_X86 "Buld for x86 target" ON)
-OPTION(USE_3DNOW "Support 3DNow" OFF)
+OPTION(BUILD_32BIT "Build for 32-bit targets, otherwise x64" OFF)
+OPTION(USE_3DNOW "Support 3DNow" OFF) # this probably anyway doesn't work
+
+
+# Set the configuration for the assembler
+if (${BUILD_32BIT})
+    if(MSVC)
+        # Nothing to do - MSVC supports building 32bit using a different cmake invokation
+    else()
+        # Set this flag for the compiler and linker
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+        SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -m32")
+    endif()
+        
+    # tell the assembler to generate 32 bit files
+    if (WIN32)
+        set(CMAKE_ASM_NASM_OBJECT_FORMAT win32)
+    else()
+        set(CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
+    endif()
+else()
+    if (WIN32)
+        set(CMAKE_ASM_NASM_OBJECT_FORMAT win64)
+    else()
+        set(CMAKE_ASM_NASM_OBJECT_FORMAT elf64)
+    endif()
+endif()
+
+if (WIN32)
+    set(CMAKE_ASM_NASM_DEFINITIONS ${CMAKE_ASM_NASM_DEFINITIONS}
+        -D_NASM_BUILD_FOR_WIN32
+    )
+else()
+    set(CMAKE_ASM_NASM_DEFINITIONS ${CMAKE_ASM_NASM_DEFINITIONS}
+        -D_NASM_BUILD_FOR_LINUX
+    )
+endif()
+
+
+set(CMAKE_ASM_NASM_COMPILE_OBJECT "<CMAKE_ASM_NASM_COMPILER> <INCLUDES> \
+    <FLAGS> -DGLIDE_PACKED_RGB ${CMAKE_ASM_NASM_DEFINITIONS} -f ${CMAKE_ASM_NASM_OBJECT_FORMAT} -o <OBJECT> <SOURCE>")
+    
 
 set (NEWPCI_LIB_DIR ${CMAKE_SOURCE_DIR}/../../swlibs/newpci/pcilib)
 
@@ -35,26 +75,17 @@ set(GLIDE_SOURCES
     ${CMAKE_SOURCE_DIR}/glide/src/cpuid.c 
     ${CMAKE_SOURCE_DIR}/glide/src/fpu.c 
     #${CMAKE_SOURCE_DIR}/glide/src/xtexdl.c
+        ${CMAKE_SOURCE_DIR}/glide/src/cpuid.c
 )
 
 if (${BUILD_32BIT})
-set (GLIDE_ASM_SOURCE
-   ${CMAKE_SOURCE_DIR}/glide/src/xdraw2.asm
-   #${CMAKE_SOURCE_DIR}/glide3/src/xdraw2.S
-   #${CMAKE_SOURCE_DIR}/glide3/src/xdraw3.asm
-)
+    set (GLIDE_ASM_SOURCE
+       ${CMAKE_SOURCE_DIR}/glide/src/xdraw2.asm
+    )
 else()
     set(GLIDE_SOURCES ${GLIDE_SOURCES} 
         # 64bit doesn't support compiling assembly - use the C code instead
         ${CMAKE_SOURCE_DIR}/glide/src/xdraw2_x64.c
-    )
-endif()
-
-if (${USE_X86})
-    set(GLIDE_SOURCES ${GLIDE_SOURCES} 
-        ${CMAKE_SOURCE_DIR}/glide/src/cpuid.c
-        #${CMAKE_SOURCE_DIR}/glide3/src/xdraw2_def.c
-        #${CMAKE_SOURCE_DIR}/glide3/src/xdraw3_def.c
     )
 endif()
 
@@ -103,8 +134,8 @@ set(LINUX_DEPENDENCIES
 
 if(WIN32)
     set(GLIDE_OUTSIDE_SOURCES ${GLIDE_OUTSIDE_SOURCES}
-       ${WINDOWS_DEPENDENCIES} 
-    )
+       ${WINDOWS_DEPENDENCIES}
+    )    
 else()
     set(GLIDE_OUTSIDE_SOURCES ${GLIDE_OUTSIDE_SOURCES}
        ${LINUX_DEPENDENCIES} 
@@ -154,9 +185,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     -DGLIDE_BLIT_CLEAR=1 
     -DCVG 
     -DGLIDE_PLUG 
-    -DGLIDE_SPLASH 
-    #-DGL_MMX 
-    #-DGL_AMD3D 
+    -DGLIDE_SPLASH
     -DGL_X86
     -DGLIDE_USE_C_TRISETUP
 )
@@ -169,14 +198,21 @@ if(CMAKE_BUILD_TYPE MATCHES DEBUG)
     )
 endif()
 
-if (${BUILD_32BIT})
-    if(MSVC)
-        set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-    else()
-        set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
-    endif()
+# OS-specific-specific defines
+if(WIN32)
     
-    #target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -m32)
+    # All attributes starting with "_NASM" are needed to be able to build the asm sources correctly.
+    # The *.asm files contain os-specific sections, that are switched using the defines below.
+    # NASM does not provide any _WIN32 or unix defines, so we have to add them ourselves.
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
+        _NASM_BUILD_FOR_WIN32
+    )
+    
+else()
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
+        _NASM_BUILD_FOR_LINUX
+    )
 endif()
+
 
 #gcc -o fxgasm -Wall -I. -I../../incsrc -I../../init -I../../../swlibs/fxmisc -I../../../swlibs/newpci/pcilib -I../../../swlibs/fxmemmap #-I../../../swlibs/texus2/lib -DGLIDE3 -DGLIDE3_ALPHA -DGLIDE_HW_TRI_SETUP=1 -DGLIDE_PACKED_RGB=0 -DGLIDE_PACKET3_TRI_SETUP=1 -DGLIDE_TRI_CULLING=1# -DUSE_PACKET_FIFO=1 -DGLIDE_DISPATCH_SETUP -DGLIDE_DISPATCH_DOWNLOAD -DGLIDE_CHIP_BROADCAST=1 -DGLIDE_BLIT_CLEAR=1 -DCVG -DGL_MMX -DGL_AMD3D -DGL_X86 -O1 -ffast-math fxgasm.c

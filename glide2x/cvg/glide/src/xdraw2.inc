@@ -68,14 +68,14 @@
     push      ebx                   ; save caller's register variable
     push      ebp                   ; save frame pointer
 
-    mov       gc, [_GlideRoot+curGC]; GR_DCL_GC
+    mov       gc, [__GlideRoot+curGC]; GR_DCL_GC
     mov       fa, [esp + _va$]      ; get base address of vertex A
 
     mov       fb, [esp + _vb$]      ; get base address of vertex B
     mov       cull, [gc + cull_mode]; get cull mode
 
     mov       fc, [esp + _vc$]      ; get base address of vertex C
-    mov       tempVal, [_GlideRoot+curTriSize]
+    mov       tempVal, [__GlideRoot+curTriSize]
 
     femms                           ; will use AMD3D, clear FPU/MMX registers
 
@@ -129,7 +129,7 @@
     push      0h                    ; pointer to function name = NULL
 
     push      tempVal               ; fifo space required
-    call      _FifoMakeRoom         ; note: updates fifoPtr
+    call      __FifoMakeRoom         ; note: updates fifoPtr
 
     ;add       esp, 12               ; remove 3 DWORD arguments from stack
     ;nop                             ; filler
@@ -141,8 +141,8 @@
     push      ebx                   ; save caller's register variable
     push      ebp                   ; save frame pointer
 
-    mov       gc, [_GlideRoot+curGC]; GR_DCL_GC
-    mov       tempVal, [_GlideRoot+curTriSize] ; data for whole triangle in bytes
+    mov       gc, [__GlideRoot+curGC]; GR_DCL_GC
+    mov       tempVal, [__GlideRoot+curTriSize] ; data for whole triangle in bytes
 
     mov       ebx, [gc + fifoRoom]  ; fifo space available
     add       tempVal, 4            ; fifo space needed (include 4-byte header)
@@ -156,7 +156,7 @@
     push      0h                    ; pointer to function name = NULL
 
     push      tempVal               ; fifo space needed
-    call      _FifoMakeRoom         ; note: updates fifoPtr
+    call      __FifoMakeRoom         ; note: updates fifoPtr
 
     ;add       esp, 12               ; remove 3 DWORD arguments from stack
     ;nop                             ; filler
@@ -863,26 +863,26 @@
 
     ;; Update gc->fifoPtr and gc->fifoRoom
 
-    mov       ecx, [_GlideRoot + trisDrawn]    	; _GlideRoot.stats.trisDrawn
+    mov       ecx, [__GlideRoot + trisDrawn]    	; __GlideRoot.stats.trisDrawn
     mov       eax, fifo                         ; new fifo pointer
     
     mov       ebx, [gc + fifoPtr]               ; old fifo pointer
     mov       [gc + fifoPtr], fifo              ; save new fifo pointer
 
     mov       edx, [gc + fifoRoom]              ; old fifo space available
-    add       ecx, 1                            ; _GlideRoot.stats.trisDrawn++
+    add       ecx, 1                            ; __GlideRoot.stats.trisDrawn++
 
-    mov       ebp, [_GlideRoot + trisProcessed]; _GlideRoot.stats.trisProcessed
+    mov       ebp, [__GlideRoot + trisProcessed]; __GlideRoot.stats.trisProcessed
     sub       eax, ebx                          ; new fifo ptr - old fifo ptr = additional fifo space used
 
-    mov       [_GlideRoot + trisDrawn], ecx    	;
+    mov       [__GlideRoot + trisDrawn], ecx    	;
     sub       edx, eax                          ; new fifo space available
 
     mov       eax, 1h                           ; return value = triangle drawn
     mov       [gc + fifoRoom], edx              ; new fifo space available
 
-    add       ebp, 1				; _GlideRoot.stats.trisProcessed++
-    mov       [_GlideRoot + trisProcessed], ebp	;
+    add       ebp, 1				; __GlideRoot.stats.trisProcessed++
+    mov       [__GlideRoot + trisProcessed], ebp	;
 
     femms					; no more AMD3D code, clear FPU/MMX regs
 
@@ -896,11 +896,11 @@
 
 %IF GLIDE_CULLING
 .__cullFail:
-    mov       ebp, [_GlideRoot + trisProcessed]	; triangles processed so far
+    mov       ebp, [__GlideRoot + trisProcessed]	; triangles processed so far
     xor       eax, eax				; return value = triangle not drawn
 
-    add       ebp, 1				; _GlideRoot.stats.trisProcessed++;    
-    mov       [_GlideRoot + trisProcessed], ebp
+    add       ebp, 1				; __GlideRoot.stats.trisProcessed++;    
+    mov       [__GlideRoot + trisProcessed], ebp
 
     femms					; no more AMD3D code, clear FPU/MMX regs
 
@@ -926,7 +926,7 @@
 
     ;; Prologue stuff
     push    esi
-    mov     gc, [_GlideRoot + curGC]    ;; GR_DCL_GC    
+    mov     gc, [__GlideRoot + curGC]    ;; GR_DCL_GC    
 
     push    edi
     push    ebx
@@ -1001,7 +1001,7 @@
 	ALIGN 32
     ;; Check to make sure that we have enough room for
     ;; the complete triangle packet.
-    mov	    eax, [_GlideRoot + curTriSize]
+    mov	    eax, [__GlideRoot + curTriSize]
     mov	    ebx, [gc + fifoRoom]
 
     add	    eax, 4
@@ -1013,7 +1013,7 @@
     push    0h
     
     push    eax
-    call    _FifoMakeRoom
+    call    __FifoMakeRoom
 
     ;add	    esp, 12
 
@@ -1057,13 +1057,13 @@
 
 %IF GLIDE_PACK_RGB
     fld	    dword [vertex + b]		        ; B
-    fadd    dword [_GlideRoot + fBiasLo]	; BC GC
+    fadd    dword [__GlideRoot + fBiasLo]	; BC GC
 
     fld	    dword [vertex + g]		        ; G B
-    fadd    dword [_GlideRoot + fBiasHi]	; GC B
+    fadd    dword [__GlideRoot + fBiasHi]	; GC B
     
     fld	    dword [vertex + r]		        ; R GC BC
-    fadd    dword [_GlideRoot + fBiasHi]	; RC GC BC
+    fadd    dword [__GlideRoot + fBiasHi]	; RC GC BC
 
     fxch    st2				        ; BC GC RC
     fstp    dword [bias0]			; GC RC
@@ -1076,7 +1076,7 @@
 
 %IF GLIDE_PACK_ALPHA
     fld	    dword [vertex + a]
-    fadd    dword [_GlideRoot + fBiasHi]
+    fadd    dword [__GlideRoot + fBiasHi]
 
     and	    packCol, 000000FFh			; B color component
     and	    eax, 0000FF00h			; G component << 8
@@ -1147,7 +1147,7 @@
 .__nextVertex:	
     ;; On to the next vertex
     add	    vOffset, 4
-    mov     gc, [_GlideRoot + curGC]		; Reload gc incase we trashed it as a temp
+    mov     gc, [__GlideRoot + curGC]		; Reload gc incase we trashed it as a temp
 
     cmp	    vOffset, 16				; Offset of one past last vertex?
     jne	    .__vertexStart
@@ -1159,25 +1159,25 @@
     mov	    [gc + fifoPtr], fifo
     sub	    eax, ebx
 
-    mov	    ebx, [_GlideRoot + trisDrawn]	; _GlideRoot.stats.trisDrawn++;    
+    mov	    ebx, [__GlideRoot + trisDrawn]	; __GlideRoot.stats.trisDrawn++;    
     sub	    [gc + fifoRoom], eax
 
     add	    ebx, 1
-    mov	    [_GlideRoot + trisDrawn], ebx
+    mov	    [__GlideRoot + trisDrawn], ebx
 
     ;; return 1 (triangle drawn)    
     mov     eax, 1h
 
 .__triDone:    
     ;; Restore trashed registers
-    mov	    esi, [_GlideRoot + trisProcessed]
+    mov	    esi, [__GlideRoot + trisProcessed]
     pop     ebp
         
-    add     esi, 1    ; _GlideRoot.stats.trisProcessed++;    
+    add     esi, 1    ; __GlideRoot.stats.trisProcessed++;    
     pop     ebx
     
     pop     edi
-    mov	    [_GlideRoot + trisProcessed], esi
+    mov	    [__GlideRoot + trisProcessed], esi
         
     pop     esi
     ret
