@@ -76,7 +76,7 @@ jobs:
     - name: Upload Built Glide2x Library
       uses: actions/upload-artifact@v2
       with:
-        name: glide3x
+        name: glide2x
         path: |
             glide2x/cvg/bin_x32/*.so
             glide2x/cvg/bin_x64/*.so
