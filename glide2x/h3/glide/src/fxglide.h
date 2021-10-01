@@ -1313,7 +1313,11 @@ modify [eax];
 
 
 #define P6FENCE p6Fence()
-#elif defined(__MSC__)
+#elif defined(_MSC_VER) // Visual Studio compiler
+#  if defined(_M_X64) || defined(__amd64__)
+// TODO Clemens: ASM not supported on x64
+#    define P6FENCE
+#  else
 /* Turn off the no return value warning for the function definition.
  *
  * NB: The function returns a value so that we can use it in places
@@ -1330,9 +1334,10 @@ modify [eax];
    }
 #  define P6FENCE _grP6Fence()
 #  pragma warning(default : 4035)
+#  endif
 #elif defined(macintosh) && defined(__POWERPC__) && defined(__MWERKS__)
 #define P6FENCE __eieio()
-#elif defined(__GNUC__) && defined(__i386__)
+#elif defined(__GNUC__) && (defined(__i386__)  || defined(__x86_64__))
 #define P6FENCE asm("xchg %%eax, %0" : : "m" (_GlideRoot.p6Fencer) : "eax");
 #else
 #error "P6 Fencing in-line assembler code needs to be added for this compiler"

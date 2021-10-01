@@ -139,6 +139,7 @@
 #define MINIHWC_H
 
 #ifdef HWC_EXT_INIT
+#error 123
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
