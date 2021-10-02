@@ -390,6 +390,9 @@ typedef struct {
 
 
 #ifdef WINNT
+
+// Clemens workaround
+typedef void PDEV;
 int QueryMode(PDEV *, LPQIN lpQIN, LPVOID lpOutput);
 #else
 int QueryMode(LPQIN lpQIN, LPVOID lpOutput);

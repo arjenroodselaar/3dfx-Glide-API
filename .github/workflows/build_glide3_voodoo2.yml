@@ -1,4 +1,4 @@
-name: Build Glide3x Library (Linux X64)
+name: Build Glide3x for Voodoo2 Library
 
 on:
   push:
