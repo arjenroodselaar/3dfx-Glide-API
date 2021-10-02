@@ -46,7 +46,7 @@
 ** report Voodoo3 fbi/tmu rev number as Banshee for EA games
 ** 
 ** 159   3/06/99 10:59a Atai
-** fixed my ·F check-in.
+** fixed my ï¿½F check-in.
 ** 
 ** 158   3/05/99 2:50p Atai
 ** fbi/tmu rev mods
@@ -58,7 +58,7 @@
 ** More Norbert's stuff for the other 3DNow!(tm) partners
 ** 
 ** 155   12/03/98 11:27p Dow
-** Code 'cleanup' heç
+** Code 'cleanup' heï¿½
 ** 
 ** 154   12/03/98 10:34p Dow
 ** Added GLIDE_FGETENV for floats and removed registry code
@@ -213,7 +213,7 @@
 ** 101   4/03/98 2:11p Dow
 ** 
 ** 100   3/28/98 11:24a Dow
-** itwoç
+** itwoï¿½
 ** 
 ** 99    3/11/98 8:28p Dow
 ** WinGlide
@@ -969,7 +969,7 @@ _GlideInitEnvironment(void)
 
   /* Setup the basic proc tables based on the cpu type. */
   {
-    _GlideRoot.CPUType = GLIDE_GETENV("FX_CPU", _cpu_detect_asm() );
+    _GlideRoot.CPUType = 0x0UL; // Clemens patch: hardcode for now GLIDE_GETENV("FX_CPU", _cpu_detect_asm() );
     GDBG_INFO(80,"\tcpu: %d\n",_GlideRoot.CPUType);
       
     /* Default case */

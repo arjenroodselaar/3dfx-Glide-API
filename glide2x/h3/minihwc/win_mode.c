@@ -169,6 +169,7 @@ getModesRegPath()
      * $/devel/swtools/bansheecp2 */
     retVal = "SYSTEM\\CurrentControlSet\\Services\\3Dfx\\Device0\\modes\\";
   } else {
+#ifndef GLIDE_BUILD_64BIT
     QDEVNODE QDevNode;
     QIN Qin;
     int status;
@@ -195,6 +196,7 @@ getModesRegPath()
 
       retVal = regPath;
     }
+#endif
   }
 
   return retVal;

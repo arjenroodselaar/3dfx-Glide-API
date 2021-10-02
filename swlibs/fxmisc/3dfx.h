@@ -34,6 +34,10 @@ typedef unsigned long   FxU32;
 typedef signed   int    FxI32;
 typedef unsigned int    FxU32;
 #endif
+
+typedef long long       FxI64;
+typedef unsigned long long FxU64;
+
 typedef unsigned long   AnyPtr;
 typedef int             FxBool;
 typedef float           FxFloat;

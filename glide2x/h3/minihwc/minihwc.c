@@ -451,8 +451,8 @@ extern DWORD __cdecl CM_Get_DevNode_Key(DWORD,PCHAR,PVOID,ULONG,ULONG);
 
 static hwcInfo hInfo;
 static char errorString[1024];
-static FxU32 __attribute_used fenceVar;
 
+static FxU32 __attribute_used fenceVar;
 /*
  *  P6 Fence
  *
@@ -473,7 +473,7 @@ void p6Fence(void);
 #define P6FENCE {_asm xchg eax, fenceVar}
 #elif defined(__POWERPC__) && defined(__MWERKS__)
 #define P6FENCE __eieio()
-#elif defined(__DJGPP__) || defined (__MINGW32__)
+#elif defined(__DJGPP__) || (defined (__MINGW32__) && !defined(__x86_64__))
 #define P6FENCE __asm __volatile ("xchg %%eax, _fenceVar":::"%eax")
 #elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 #define P6FENCE __asm __volatile ("xchg %%eax, fenceVar":::"%eax")
@@ -3737,6 +3737,7 @@ getRegPath()
      * $/devel/swtools/bansheecp2 */
     retVal = "SYSTEM\\CurrentControlSet\\Services\\3Dfx\\Device0\\glide";
   } else {
+#ifndef GLIDE_BUILD_64BIT
     QDEVNODE QDevNode;
     QIN Qin;
     int status;
@@ -3753,7 +3754,8 @@ getRegPath()
       ReleaseDC(NULL, curDC);
     }
 
-    if ( status > 0 ) {
+    if ( status > 0 ) 
+    {
       static char regPath[255];
 
       CM_Get_DevNode_Key( QDevNode.dwDevNode, NULL, 
@@ -3763,6 +3765,7 @@ getRegPath()
 
       retVal = regPath;
     }
+#endif /* GLIDE_BUILD_64BIT */
   }
 
   return retVal;

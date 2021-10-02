@@ -74,72 +74,43 @@ set(GLIDE_SOURCES
     ${CMAKE_SOURCE_DIR}/glide/src/gtex.c 
     ${CMAKE_SOURCE_DIR}/glide/src/gtexdl.c 
     ${CMAKE_SOURCE_DIR}/glide/src/gutex.c 
-    #${CMAKE_SOURCE_DIR}/glide/src/cpuid.c 
-    #${CMAKE_SOURCE_DIR}/glide/src/xtexdl.c
+    ${CMAKE_SOURCE_DIR}/glide/src/xtexdl_def.c
+    ${CMAKE_SOURCE_DIR}/glide/src/cpudtect_stubs.c
 )
 
-if (${BUILD_32BIT})
-    set (GLIDE_ASM_SOURCE
-       ${CMAKE_SOURCE_DIR}/glide/src/xdraw2.asm
-    )
-endif()
-
-if (${USE_3DNOW})
-    set(GLIDE_SOURCES ${GLIDE_SOURCES} 
-        ${CMAKE_SOURCE_DIR}/glide/src/xdraw2_3dnow.c
-        ${CMAKE_SOURCE_DIR}/glide/src/xdraw3_3dnow.c
-        ${CMAKE_SOURCE_DIR}/glide/src/xtexdl_3dnow.c
-    )
-else()
-    set(GLIDE_SOURCES ${GLIDE_SOURCES} 
-        ${CMAKE_SOURCE_DIR}/glide/src/gxdraw.c
-        #${CMAKE_SOURCE_DIR}/glide/src/xtexdl.c
-    )
-endif()
 
 
-set(GLIDE_OUTSIDE_SOURCES
-#    ${CMAKE_SOURCE_DIR}/init/canopus.c
-#    ${CMAKE_SOURCE_DIR}/init/dac.c
-#    ${CMAKE_SOURCE_DIR}/init/gamma.c
-#    ${CMAKE_SOURCE_DIR}/init/gdebug.c
-#    ${CMAKE_SOURCE_DIR}/init/info.c
-#    ${CMAKE_SOURCE_DIR}/init/parse.c
-#    ${CMAKE_SOURCE_DIR}/init/print.c
-#    ${CMAKE_SOURCE_DIR}/init/sli.c
-#    ${CMAKE_SOURCE_DIR}/init/sst1init.c
-#    ${CMAKE_SOURCE_DIR}/init/util.c
-#    ${CMAKE_SOURCE_DIR}/init/video.c
-#    ${CMAKE_SOURCE_DIR}/init/fxremap.c
+set(GLIDE_SOURCES ${GLIDE_SOURCES} 
+    # We always use the C routines for drawing triangles, never the asm or 3dnow ones
+    ${CMAKE_SOURCE_DIR}/glide/src/gxdraw.c
 )
 
 # platform specific compile files
-set(WINDOWS_DEPENDENCIES
-    ${MINIHWC_DIR}/hwcio.c
-    ${MINIHWC_DIR}/gdebug.c
-    ${MINIHWC_DIR}/minihwc.c
-    ${MINIHWC_DIR}/win_mode.c
-    #${MINIHWC_DIR}/win9x.c   
-)
-
-set(LINUX_DEPENDENCIES
-    ${NEWPCI_LIB_DIR}/fxpci.c
-    ${NEWPCI_LIB_DIR}/fxlinux.c
-    
-    ${MINIHWC_DIR}/hwcio.c
-    ${MINIHWC_DIR}/gdebug.c
-    
-    ${FXMISC_DIR}/fxos.c
-    ${FXMISC_DIR}/fximg.c
-)
-
 if(WIN32)
+    # Windows build
     set(GLIDE_OUTSIDE_SOURCES ${GLIDE_OUTSIDE_SOURCES}
-       ${WINDOWS_DEPENDENCIES}
-    )    
+        ${MINIHWC_DIR}/hwcio.c
+        ${MINIHWC_DIR}/gdebug.c
+        ${MINIHWC_DIR}/minihwc.c
+        ${MINIHWC_DIR}/win_mode.c
+    )
+    if (${BUILD_32BIT})
+        # This code is anyway only relevant for Win9x, and can be excluded for x64 builds.
+        set (GLIDE_ASM_SOURCES ${GLIDE_ASM_SOURCES}
+            ${MINIHWC_DIR}/win9x.asm
+        )
+    endif()
 else()
+    # Linux build
     set(GLIDE_OUTSIDE_SOURCES ${GLIDE_OUTSIDE_SOURCES}
-       ${LINUX_DEPENDENCIES} 
+        ${NEWPCI_LIB_DIR}/fxpci.c
+        ${NEWPCI_LIB_DIR}/fxlinux.c
+        
+        ${MINIHWC_DIR}/hwcio.c
+        ${MINIHWC_DIR}/gdebug.c
+        
+        ${FXMISC_DIR}/fxos.c
+        ${FXMISC_DIR}/fximg.c
     )
 endif()
 
@@ -148,7 +119,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
     ${GLIDE_SOURCES}
     
     ${GLIDE_OUTSIDE_SOURCES}
-    ${GLIDE_ASM_SOURCE})
+    ${GLIDE_ASM_SOURCES})
 
 
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
@@ -188,7 +159,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     -DGLIDE_SPLASH 
     
     # forgot where this came from
-    -DGLIDE_DISPATCH_SETUP=1 
+    #-DGLIDE_DISPATCH_SETUP=1 // for asm only
     -DGLIDE_DISPATCH_DOWNLOAD=1 
     -DGLIDE_CHIP_BROADCAST=1 
     -DGLIDE_BLIT_CLEAR=1 
@@ -207,12 +178,32 @@ if (${USE_FIFO})
     )
 endif()
 
+
+if (${BUILD_32BIT})
+
+else()
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
+        -DGLIDE_BUILD_64BIT
+    )
+
+endif()
+
+
 if(WIN32)
     # Windows-only defines
     target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
         -DHWC_EXT_INIT=1
         -DFX_DLL_ENABLE 
         -DHWC_ACCESS_DDRAW=1
+        
+        -DWINNT
+    )
+    
+    # Windows build uses DirectDraw to detect possible screen resolutions and prepare
+    # the context, therefore we need to link the DirectDraw libs.
+    target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC
+        dxguid.lib
+        ddraw.lib
     )
 else()
     # Linux defines
@@ -220,6 +211,7 @@ else()
         -D__linux__
     )
 endif()
+
 
 # Additional debug logs when building debug variant
 if(CMAKE_BUILD_TYPE MATCHES DEBUG)
