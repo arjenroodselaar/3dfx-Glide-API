@@ -78,8 +78,8 @@ jobs:
       with:
         name: glide2x_for_voodoo3
         path: |
-            glide2x/cvg/bin_x32/*.so
-            glide2x/cvg/bin_x64/*.so
-            glide2x/cvg/bin_win_x64/*.dll
-            glide2x/cvg/bin_win_x32/*.dll
+            glide2x/h3/bin_x32/*.so
+            glide2x/h3/bin_x64/*.so
+            glide2x/h3/bin_win_x64/*.dll
+            glide2x/h3/bin_win_x32/*.dll
         
