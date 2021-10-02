@@ -32,7 +32,7 @@ jobs:
         mkdir -p ${{ github.workspace }}/artifacts
         
     - name: Generate FXGasm Tool
-      working-directory: "glide2x/cvg/glide/src/"
+      working-directory: "glide2x/h3/glide/src/"
       run: |
         mkdir -p fxgasm_tool/bin
         cd fxgasm_tool/bin
@@ -40,7 +40,7 @@ jobs:
         cmake --build .
         
     - name: Generate Header Files
-      working-directory: "glide2x/cvg/glide/src/"
+      working-directory: "glide2x/h3/glide/src/"
       run: |
         ./fxgasm_tool/bin/fxgasm -inline > fxinline.h
         ./fxgasm_tool/bin/fxgasm -hex > fxgasm.h

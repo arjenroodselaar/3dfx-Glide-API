@@ -1,5 +1,31 @@
-This is the source code to 3Dfx Glide for Voodoo graphics accelerators.
-It's forked from the original CVS repo of Glide open source project at
-sourceforge:  https://sourceforge.net/projects/glide/
+# 3dfx Glide API
 
-Source is licensed under 3DFX GLIDE Source Code General Public License.
+This is the source code to 3Dfx Glide for Voodoo graphics accelerators. It's forked from the original CVS repo of Glide open source project at sourceforge:  https://sourceforge.net/projects/glide/
+
+The source is licensed under 3DFX GLIDE Source Code General Public License.
+
+## Motivation
+
+Although 3dfx disappeared from the marked in 2000, there is still a large community of enthusiasts that enjoy using 3dfx video cards up to this day.
+A part of these enthusiasts focus on providing software for modern-day operating systems, and this is where this project comes in.
+
+The Glide API is, similar to OpenGL/Direct3D, a 3D API. It is used by many old-school video games, and in order to run these games on present-day OS, the Glide API libraries need to be available.
+
+This project is a port of the Open-Source Linux Glide libraries, and supports cross-platform builds for Linux and Windows, both x86 and x64.
+
+The toolchain is ported to CMake to simplify cross-platform builds, and get rid of a large set of hard to use makefiles.
+
+## How to Build?
+The libraries are tested under Linux, using the mingw-w64 cross-platform compiler. Visual Studio builds might also work, but are currently not tested in the Github Action CI environment.
+
+The Glide API comes in two versions, Glide2x and Glide3x. Both versions have different libraries for the video card series they are supporting:
+* sst1 is for Voodoo1 cards
+* cvg is for Voodoo2 cards
+* h3 is for Voodoo3/Velocity cards
+* h5 (Glide3x only) is for Voodoo4/5 cards
+
+The simplest way to build the libraries is to use the provided docker container, and refer at the build steps of the Github actions.
+
+## Where to Download?
+The libraries are automatically build by the CI for every commit, so you can also use the CI builds (see the "Actions" tab for the download link).
+
