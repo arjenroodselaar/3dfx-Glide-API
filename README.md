@@ -27,5 +27,5 @@ The Glide API comes in two versions, Glide2x and Glide3x. Both versions have dif
 The simplest way to build the libraries is to use the provided docker container, and refer at the build steps of the Github actions.
 
 ## Where to Download?
-The libraries are automatically build by the CI for every commit, so you can also use the CI builds (see the "Actions" tab for the download link).
+The libraries are automatically build by the CI for every commit, so you can also use the CI builds (see the "Actions" tab https://github.com/Danaozhong/glide/actions for the download link).
 
