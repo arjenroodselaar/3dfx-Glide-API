@@ -18,6 +18,24 @@
 ** COPYRIGHT 3DFX INTERACTIVE, INC. 1999, ALL RIGHTS RESERVED
 **
 ** $Log:
+** $Header: /cvsroot/glide/glide3x/h5/minihwc/minihwc.c,v 1.4 2000/11/16 19:26:03 joseph Exp $
+** $Log: 
+**  99   GlideXP   1.72.7          12/28/01 Ryan Nunn       Removing stupid debug
+**       comments.
+**  98   GlideXP   1.72.6          12/28/01 Ryan Nunn       Improving faster WinXP 
+**       Alt-Tab Fix.
+**  97   GlideXP   1.72.5          12/23/01 Ryan Nunn       Faster WinXP Alt-Tab
+**       Fix.
+**  96   GlideXP   1.72.4          12/13/01 Ryan Nunn       Getting Alt-Tab on
+**       Windows XP to work. #define WINXP_ALT_TAB_FIX=1 to enable
+**  95   GlideXP   1.72.3          12/12/01 Ryan Nunn       Fixing Screenshots
+**       on 4 chip boards and improved accuracy
+**  94   GlideXP   1.72.2          12/10/01 Ryan Nunn       Working around 
+**       problems in Windows XP
+**  93   GlideXP   1.72.1          12/10/01 Ryan Nunn       Getting to compile
+**       In windows
+**
+** $OldLog
 **  92   3dfx      1.71.1.6.1.4.1.711/08/00 Drew McMinn     Added
 **       FX_GLIDE_BRIGHTNESS and FX_GLIDE_CONTRAST modifiers
 **  91   3dfx      1.71.1.6.1.4.1.610/11/00 Brent           Forced check in to
@@ -743,6 +761,12 @@
 #include <glide.h>
 
 #ifdef HWC_EXT_INIT
+#ifdef __WIN32__
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#endif
 #include "hwcext.h"
 #else
 #include <fxpci.h>
@@ -899,6 +923,7 @@ static void _aligned_free8(void *ptr) {
 
 #define MMX_RESET() __asm __volatile ("emms")
 
+#if 0
 #define MMX_SETUP2(ar, gb, ar1m, gb1m, ar2m, gb2m)\
 	__asm(					\
 		"emms"				\
@@ -973,6 +998,7 @@ static void _aligned_free8(void *ptr) {
 		movl	%%eax, %0		\n\
 		movl	%%edx, %1		\n\
 	":"+a"(s), "+d"(dst):"D"(src_width), "g"(stride_diff));
+#endif
 #elif defined(__WATCOMC__)
 
 #define MMX_RESET()
@@ -1048,10 +1074,12 @@ void p6Fence(void);
 #define P6FENCE {_asm xchg eax, fenceVar}
 #elif defined(__POWERPC__) && defined(__MWERKS__)
 #define P6FENCE __sync()
-#elif defined(__DJGPP__) || defined (__MINGW32__)
+#elif defined(__DJGPP__) || (defined (__MINGW32__) && !defined(__x86_64__))
 #define P6FENCE __asm __volatile ("xchg %%eax, _fenceVar":::"%eax")
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+#elif defined(__GNUC__) && (defined(__i386__) && !defined(__x86_64__))
 #define P6FENCE __asm __volatile ("xchg %%eax, fenceVar":::"%eax")
+#elif defined(__GNUC__) && defined(__x86_64__)
+#define P6FENCE /* TODO Clemens */
 #elif defined(__GNUC__) && defined(__ia64__)
 # define P6FENCE asm volatile ("mf.a" ::: "memory");
 #elif defined(__GNUC__) && defined(__alpha__)
@@ -3021,7 +3049,6 @@ enumSurfaceCallback(LPDIRECTDRAWSURFACE ddSurface,
 
   return retVal;
 }
-
 
 FxBool 
 hwcAllocWinFifo(hwcBoardInfo* bInfo, 
@@ -6182,7 +6209,7 @@ static void hwcReadRegion565(hwcBoardInfo *bInfo, FxU32 src, FxU32 src_x, FxU32 
 
   stride_diff = strideInBytes - (src_width*2);
 
-#if GL_X86  
+#if 0 /* Clemens Disable this optimization, as it anyway won't work on x64 */
   if (CPUInfo && (CPUInfo->os_support & _CPU_FEATURE_MMX))
     {
       /* MMX Optimized Loop */
@@ -6342,7 +6369,7 @@ static void hwcReadRegion1555(hwcBoardInfo *bInfo, FxU32 src, FxU32 src_x, FxU32
 
   stride_diff = strideInBytes - (src_width*2);
 
-#if GL_X86  
+#if 0 /* Clemens Disable this optimization, as it anyway won't work on x64 */  
   if (CPUInfo && (CPUInfo->os_support & _CPU_FEATURE_MMX))
     {
       /* MMX Optimized Loop */
@@ -6504,7 +6531,7 @@ static void hwcReadRegion8888(hwcBoardInfo *bInfo, FxU32 src, FxU32 src_x, FxU32
 
   stride_diff = strideInBytes - (src_width*4);
 
-#if GL_X86  
+#if 0 /* Clemens Disable this optimization, as it anyway won't work on x64 */  
   if (CPUInfo && (CPUInfo->os_support & _CPU_FEATURE_MMX))
     {
       /* MMX Optimized Loop */
@@ -6848,7 +6875,7 @@ static void hwcCopyBuffer8888Flipped(hwcBoardInfo *bInfo, FxU16 *source, int w, 
   FxU8 *endline = dst+w*4;
   w*= 4;
   
-#if GL_X86
+#if 0 /* Clemens Disable this optimization, as it anyway won't work on x64 */ //GL_X86
   if (CPUInfo && (CPUInfo->os_support & _CPU_FEATURE_MMX))
     {
       /* MMX Optimized Loop */
@@ -6986,7 +7013,7 @@ static void hwcCopyBuffer8888FlippedShifted(hwcBoardInfo *bInfo, FxU16 *source, 
   FxU8 *endline = dst+w*4;
   w *= 4;
   
-#if GL_X86
+#if 0 /* Clemens Disable this optimization, as it anyway won't work on x64 */ //GL_X86
   if (CPUInfo && (CPUInfo->os_support & _CPU_FEATURE_MMX))
     {
       /* MMX Optimized Loop */
@@ -7137,7 +7164,7 @@ static void hwcCopyBuffer8888FlippedDithered(hwcBoardInfo *bInfo, FxU16 *source,
   val_max = (0xFF << aaShift);
   dither_mask = ~((~0) << aaShift);
   
-#if GL_X86
+#if 0 /* Clemens Disable this optimization, as it anyway won't work on x64 */ //GL_X86
   if (CPUInfo && (CPUInfo->os_support & _CPU_FEATURE_MMX))
     {
       FxU32 sse_mmxplus = CPUInfo->os_support & (_CPU_FEATURE_MMXPLUS|_CPU_FEATURE_SSE);
@@ -7743,7 +7770,7 @@ static void hwcCopyBuffer565Shifted(hwcBoardInfo *bInfo, FxU16 *src, int w, int 
   gshift = 3 - aaShift;
   rshift = 8 - aaShift;
 
-#if GL_X86
+#if 0 /* Clemens Disable this optimization, as it anyway won't work on x64 */ //GL_X86
   if (CPUInfo && (CPUInfo->os_support & _CPU_FEATURE_MMX))
   {
 	  /* MMX Optimized Loop */
@@ -8227,12 +8254,11 @@ static FxBool adjustBrightnessAndContrast_m(FxFloat contrast,
 }
 /* Gamma */
 
-
 FxBool
 hwcGammaTable(hwcBoardInfo *bInfo, FxU32 nEntries, FxU32 *r, FxU32 *g, FxU32 *b)
 {
 #define FN_NAME "hwcGammaTable"
-#if 1
+#if 1 
   FxU32 gRamp[256];
   FxU32 i;
   FxU32 vidProcCfg;
@@ -8300,7 +8326,7 @@ hwcGammaTable(hwcBoardInfo *bInfo, FxU32 nEntries, FxU32 *r, FxU32 *g, FxU32 *b)
    **  code.
    */
   HWC_IO_LOAD( bInfo->regInfo, vidProcCfg, vidProcCfg);
-  
+
   /* Determin which set of CLUT entries are selected */
   if (vidProcCfg & SST_OVERLAY_CLUT_SELECT)
     dacBase = 256;
@@ -8314,6 +8340,7 @@ hwcGammaTable(hwcBoardInfo *bInfo, FxU32 nEntries, FxU32 *r, FxU32 *g, FxU32 *b)
             FN_NAME, (vidProcCfg & SST_OVERLAY_EN) ? 1 : 0);
   GDBG_INFO(80, "%s:  vidProcCFG(SST_OVERLAY_CLUT_BYPASS) = %d\n",
             FN_NAME, (vidProcCfg & SST_OVERLAY_CLUT_BYPASS) ? 1 : 0);
+
 
   for (i = 0; i < nEntries; i++) {
     int repeat = 100;
@@ -8505,7 +8532,6 @@ hwcGetGammaTable(hwcBoardInfo *bInfo, FxU32 nEntries, FxU32 *r, FxU32 *g, FxU32 
   
 #undef FN_NAME
 } /* hwcGetGammaTable */
-
 
 FxBool
 hwcGammaRGB(hwcBoardInfo *bInfo, float gammaR, float gammaG, float gammaB)
@@ -8858,7 +8884,7 @@ hwcShareContextData(hwcBoardInfo *bInfo, FxU32 **data)
       GDBG_INFO(80, FN_NAME ":  ProcID=%d\n", ctxReq.optData.contextDwordNTReq.procId);  
       GDBG_INFO(80, FN_NAME ":  NT Branch\n");  
       {
-#if 1
+#if 0
         FxU32 ohWell;
 
         ctxReq.which = HWCEXT_CONTEXT_DWORD_NT;
@@ -9538,3 +9564,5 @@ FxBool hwcIsOSWin9x()
   return FXFALSE;
 } /* hwcIsOSWin9x */
 #endif
+
+
