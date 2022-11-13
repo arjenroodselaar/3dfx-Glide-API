@@ -1298,7 +1298,7 @@ _GlideInitEnvironment(void)
   /* dBorca - play safe */
   grErrorSetCallback(_grErrorDefaultCallback);
 
-#if GL_X86
+#if 0
   /* Get CPU Info before we detect glide devices */
   _cpuid (&_GlideRoot.CPUType);
 
@@ -1320,7 +1320,7 @@ _GlideInitEnvironment(void)
 #define GLIDE_34GETENV(__envVar, __defVal) \
   (((signed char)(atof(((envStr = GETENV(__envVar)) == NULL) ? (__defVal) : (envStr))*16.0f)+8)&0x7f)
 
-#if GL_X86
+#if 0
   /* No CPU Extensions Allowed */
   if (GLIDE_GETENV("FX_GLIDE_NO_CPU_EXTENSIONS", 0L))
   {

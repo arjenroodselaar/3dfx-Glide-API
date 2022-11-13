@@ -2733,9 +2733,9 @@ _grSstVRetraceOn(void);
 #if USE_STANDARD_TLS_FUNC
 
 #ifdef __GNUC__
-extern
+static
 #endif
-__inline unsigned long
+inline unsigned long
 getThreadValueFast() {
   /* According to Microsoft, TlsGetValue is implemented with speed as the
    * primary goal. The function performs minimal parameter validation and
@@ -2756,8 +2756,7 @@ getThreadValueFast() {
 #define WNT_TLS_INDEX_TO_OFFSET(i)      ((i)*sizeof(DWORD)+WNT_TEB_TLS_OFFSET)
 
 #ifdef __GNUC__
-
-extern __inline unsigned long getThreadValueFast (void)
+static __inline unsigned long getThreadValueFast (void)
 {
  unsigned long t;
  __asm __volatile (" \
