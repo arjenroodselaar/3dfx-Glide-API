@@ -36,16 +36,58 @@ Go to the Glide3 directory:
 cd glide3x\h5
 ```
 
+#### Run FXgasm Header Generator
+
+Before building the Glide3 libray, we first need to build the FXgasm tool. This tool will generate a few files needed for the later compilation steps.
+```ps1
+cd glide3\src\fxgasm_tool
+```
+Create a binary directory, and generate and build the tool.
+```ps1
+mkdir bin_win32
+cd bin_win32
+cmake --DBUILD_32BIT=ON  -G "Visual Studio 16 2019" -A Win32 ..
+cmake --build .
+```
+
+Generate the headers with fxgasm:
+```ps1
+cd ../..
+./fxgasm_tool/bin_win32/Debug/fxgasm -inline > fxinline.h
+./fxgasm_tool/bin_win32/Debug/fxgasm -hex > fxgasm.h
+```
+
+#### Run FX Build Number Header Generator
+
 Create a binary directory.
 ```ps1
+cd fxbldno_tool
 mkdir bin_win32
 cd bin_win32
 ```
 
-Run CMake for Visual Studio 2019, 32 bit.
+Generate project, build, generate header files... 
 ```ps1
 cmake --DBUILD_32BIT=ON  -G "Visual Studio 16 2019" -A Win32 ..
+cmake --build .
+cd ../..
+./fxbldno_tool/bin_win32/Debug/fxbldno > fxbldno.h
+
 ```
+#### Generate the Glide3 DLL
+Move back to the "h5" directory, and generate the build directory.
+```ps1
+cd ../..
+mkdir bin_win32
+cd bin_win32
+```
+Similar to the steps before, generate your Visual Studio solution, and build the DLL.
+```ps1
+cmake --DBUILD_32BIT=ON  -G "Visual Studio 16 2019" -A Win32 ..
+cmake --build .
+
+```
+The glide3x.dll should be generated in the bin_win32\Debug directory, ready for use.
 
 ## Where to Download?
 The libraries are automatically build by the CI for every commit, so you can also use the CI builds (see the "Actions" tab https://github.com/Danaozhong/glide/actions for the download link).
