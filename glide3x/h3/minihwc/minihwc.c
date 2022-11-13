@@ -613,7 +613,7 @@ void p6Fence(void);
  "xchg eax, fenceVar" \
  modify [eax];
 #define P6FENCE p6Fence()
-#elif defined(__MSC__)
+#elif defined(_MSC_VER)
 #define P6FENCE {_asm xchg eax, fenceVar}
 #elif defined(__POWERPC__) && defined(__MWERKS__)
 #define P6FENCE __eieio()

@@ -472,7 +472,7 @@ GR_ENTRY(grAADrawTriangle,
     if ((gc->state.cull_mode != GR_CULL_DISABLE) && (((FxI32)(j.i ^ (gc->state.cull_mode << 31UL))) >= 0))
       return;
   }
-#if !defined(__MSC__)
+#if !defined(_MSC_VER)
         {
                 const void *verts[3];
                 verts[0] = a;

@@ -187,7 +187,7 @@ main (int argc, char **argv)
 #endif
 
     HEADER ("GlideRoot");
-#if defined(__WATCOMC__) || defined(__MSC__) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
+#if defined(__WATCOMC__) || defined(_MSC_VER) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
     OFFSET (gr,p6Fencer,"p6Fencer\t");
 #endif
     OFFSET (gr,current_sst,"current_sst\t");

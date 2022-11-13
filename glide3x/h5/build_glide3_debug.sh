@@ -19,7 +19,7 @@ popd
 popd
 
 
-# build the fxgasm file
+# build the build number file
 pushd glide3/src/
 mkdir fxbldno_tool/bin
 pushd fxbldno_tool/bin

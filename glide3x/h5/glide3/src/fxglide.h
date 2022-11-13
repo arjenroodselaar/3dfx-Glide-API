@@ -2010,7 +2010,7 @@ typedef struct GrGC_s
 **  stuff near the top is accessed a lot
 */
 struct _GlideRoot_s {
-#if defined(__WATCOMC__) || defined(__MSC__) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
+#if defined(__WATCOMC__) || defined(_MSC_VER) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
   int   p6Fencer;           /* xchg to here to keep this in cache!!! */
 #endif
   unsigned long tlsIndex;
@@ -2151,7 +2151,7 @@ extern struct _GlideRoot_s GR_CDECL _GlideRoot;
 extern GrGCFuncs _curGCFuncs;
 #endif
 
-#if defined( __MSC__ )
+#if defined( _MSC_VER)
 /* Turn off the no return value warning for the function definition.
  *
  * NB: The function returns a value so that we can use it in places
@@ -2314,11 +2314,6 @@ _trisetup_noclip_valid(const void *va, const void *vb, const void *vc );
 #define TRISETUP_ARGB(__cullMode)  TRISETUP_NORGB(__cullMode)
 
 #if defined(_MSC_VER)
-#if (_MSC_VER < 1200) /* TRISETUP Macro for pre-msvc 6.0 */
-#define TRISETUP \
-  __asm { mov edx, gc }; \
-  (*gc->triSetupProc)
-#else  /* TRISETUP Macro for msvc 6 or later */
 #if defined(GLIDE_DEBUG) || GLIDE_USE_C_TRISETUP
 /* MSVC6 Debug does funny stuff, so push our parms inline */
 #define TRISETUP(_a, _b, _c) \
@@ -2337,7 +2332,6 @@ _trisetup_noclip_valid(const void *va, const void *vb, const void *vc );
   __asm { mov edx, gc }; \
   ((FxI32 (*)(const void *va, const void *vb, const void *vc, GrGC *gc))*gc->triSetupProc)(_a, _b, _c, gc)
 #endif
-#endif /* _MSC_VER */
 
 #elif defined(__POWERPC__)
 #define TRISETUP(_a, _b, _c) \

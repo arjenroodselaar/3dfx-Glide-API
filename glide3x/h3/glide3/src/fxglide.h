@@ -1410,7 +1410,7 @@ typedef struct GrGC_s
 **  stuff near the top is accessed a lot
 */
 struct _GlideRoot_s {
-#if defined(__WATCOMC__) || defined(__MSC__) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
+#if defined(__WATCOMC__) || defined(_MSC_VER) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
   int p6Fencer;                 /* xchg to here to keep this in cache!!! */
 #endif
   unsigned long
@@ -1514,7 +1514,7 @@ extern struct _GlideRoot_s GR_CDECL _GlideRoot;
 extern GrGCFuncs _curGCFuncs;
 #endif
 
-#if defined( __MSC__ )
+#if defined( _MSC_VER )
 /* Turn off the no return value warning for the function definition.
  *
  * NB: The function returns a value so that we can use it in places

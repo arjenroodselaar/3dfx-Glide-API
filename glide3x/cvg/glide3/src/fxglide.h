@@ -452,7 +452,7 @@ p6Fence(void);
   modify [eax];
 
 #define P6FENCE p6Fence()
-#elif defined(__MSC__)
+#elif defined(_MSC_VER)
 #define P6FENCE {_asm xchg eax, p6FenceVar}
 #elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 #  define P6FENCE asm("xchg %%eax,%0" : /*outputs*/ : "m" (p6FenceVar) : \
@@ -1349,7 +1349,7 @@ typedef struct GrGC_s
 **  stuff near the top is accessed a lot
 */
 struct _GlideRoot_s {
-#if defined(__WATCOMC__) || defined(__MSC__) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
+#if defined(__WATCOMC__) || defined(_MSC_VER) || (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
   int p6Fencer;                 /* xchg to here to keep this in cache!!! */
 #endif
   int current_sst;
