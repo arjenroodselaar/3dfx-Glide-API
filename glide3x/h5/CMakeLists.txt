@@ -217,9 +217,9 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     -DGLIDE_SPLASH
 
     # Use MMX
-    -DGL_MMX
-    -DGL_SSE
-    -DGL_SSE2
+    #-DGL_MMX
+    #-DGL_SSE
+    #-DGL_SSE2
     -DGL_X86
 
     # Do not use the ASM routines, but the C triangle setup routines instead

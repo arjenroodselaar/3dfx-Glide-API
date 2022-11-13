@@ -33,8 +33,8 @@ popd
 # go back to initial directory
 popd
 
-# if that worked well, let's build the Glide2API for Voodoo2.
-#mkdir -p bin
-#cd bin
-#cmake ..
-#cmake --build .
+# if that worked well, let's build the Glide3API for Voodoo4/5.
+mkdir -p bin
+cd bin
+cmake ..
+cmake --build .

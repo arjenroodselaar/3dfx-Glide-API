@@ -791,6 +791,8 @@
 
 #include <ddraw.h>
 #include "qmodes.h"
+
+#ifndef GLIDE_BUILD_64BIT
 #if 0 /* moved to asm so we don't need w9x ddk headers. */
 #define IS_32
 #define Not_VxD
@@ -802,6 +804,7 @@ extern DWORD __cdecl CM_Get_DevNode_Key(DWORD,PCHAR,PVOID,ULONG,ULONG);
 #define CM_REGISTRY_HARDWARE 0
 #define CM_REGISTRY_SOFTWARE 1
 #endif
+#endif /* GLIDE_BUILD_64BIT */
 
 #endif
 
@@ -1366,6 +1369,7 @@ getRegPath()
       }
     }
   } else {
+  #ifndef GLIDE_BUILD_64BIT
     QDEVNODE QDevNode;
     QIN Qin;
     int status = 0;
@@ -1392,6 +1396,7 @@ getRegPath()
       strcat(strval, "\\glide");
       retVal = strval;
     }
+#endif
   }
 
   return retVal;
@@ -4229,11 +4234,12 @@ hwcInitVideo(hwcBoardInfo *bInfo, FxBool tiled, FxVideoTimingInfo *vidTiming,
       //if (cLostPointer == &dummyContextDWORD || (envStr && atoi(envStr) > 0)) {
       if (!envStr || atoi(envStr) > 0) {
         WNDPROC
-          curproc = (WNDPROC)GetWindowLong((HWND)bInfo->vidInfo.hWnd, GWL_WNDPROC);
+          curproc = (WNDPROC)GetWindowLongPtr((HWND)bInfo->vidInfo.hWnd, GWLP_WNDPROC);
 
         if (curproc && curproc != (WNDPROC)_XPAltTabProc) {
           GDBG_INFO(80, FN_NAME ":  Setting up alt-tab fix hack.\n");
-          wpWinProc = (WNDPROC)SetWindowLong((HWND)bInfo->vidInfo.hWnd, GWL_WNDPROC, (LONG)_XPAltTabProc);
+
+          wpWinProc = (WNDPROC)SetWindowLongPtr((HWND)bInfo->vidInfo.hWnd, GWLP_WNDPROC, (LONG_PTR)&_XPAltTabProc);
         }
       }
     }
@@ -5713,11 +5719,11 @@ hwcResetVideo(hwcBoardInfo *bInfo) {
   /* Need to uninstall our winproc before restoring FSEM. */
   {
     WNDPROC
-      curproc = (WNDPROC)GetWindowLong((HWND)bInfo->vidInfo.hWnd, GWL_WNDPROC);
+      curproc = (WNDPROC)GetWindowLongPtr((HWND)bInfo->vidInfo.hWnd, GWLP_WNDPROC);
 
     if (curproc == (WNDPROC)_XPAltTabProc) {
       GDBG_INFO(80, FN_NAME ":  Undoing alt-tab fix hack.\n");
-      SetWindowLong((HWND)bInfo->vidInfo.hWnd, GWL_WNDPROC, (LONG)wpWinProc);
+      SetWindowLongPtr((HWND)bInfo->vidInfo.hWnd, GWLP_WNDPROC, (LONG_PTR)wpWinProc);
       wpWinProc = 0;
     }
   }

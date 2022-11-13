@@ -89,7 +89,7 @@ jobs:
     - name: Upload Built Glide3x Library
       uses: actions/upload-artifact@v2
       with:
-        name: glide3x Voodo3/4/5
+        name: glide3x Voodo345
         path: |
             glide3x/h5/bin_x32/*.so
             glide3x/h5/bin_x64/*.so
