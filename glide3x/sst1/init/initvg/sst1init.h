@@ -132,7 +132,7 @@ p6Fence(void);
 
 #define P6FENCE p6Fence()
 
-#elif defined(__MSC__)
+#elif defined(_MSC_VER)
 
 #define P6FENCE {_asm xchg eax, p6FenceVar}
 

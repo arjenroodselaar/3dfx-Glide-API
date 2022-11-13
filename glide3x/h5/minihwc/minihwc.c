@@ -1067,13 +1067,7 @@ static void hwc_errncpy(char *dst,const char *src)
  * This was yoinked from sst1/include/sst1init.h, and should be
  * merged back into something if we decide that we need it later.
  */
-#if defined(__WATCOMC__)
-void p6Fence(void);
-#pragma aux p6Fence = \
- "xchg eax, fenceVar" \
- modify [eax];
-#define P6FENCE p6Fence()
-#elif defined(__MSC__)
+#if defined(_MSC_VER)
 #define P6FENCE {_asm xchg eax, fenceVar}
 #elif defined(__POWERPC__) && defined(__MWERKS__)
 #define P6FENCE __sync()
