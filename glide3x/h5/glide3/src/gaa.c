@@ -471,7 +471,7 @@ GR_ENTRY(grAADrawTriangle,
                 verts[2] = c;
                 (*gc->archDispatchProcs.drawTrianglesProc)(GR_VTX_PTR_ARRAY, 3, verts);
         }
-#elif defined(__MSC__)
+#elif defined(_MSC_VER)
   grDrawTriangle(a, b, c);
 #else
   (*gc->archDispatchProcs.drawTrianglesProc)(GR_VTX_PTR_ARRAY, 3, (void*)&a);

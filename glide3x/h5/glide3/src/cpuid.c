@@ -83,7 +83,7 @@ typedef unsigned int word32;
 #endif
 
 
-#ifndef __MSC__
+#ifndef _MSC_VER
 static jmp_buf j;
 
 
@@ -142,7 +142,7 @@ static int check_feature (int feature)
  */
 static int has_feature (int feature)
 {
-#ifndef __MSC__
+#ifndef _MSC_VER
  int rv;
 
  /* register signal handlers */

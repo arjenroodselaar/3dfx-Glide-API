@@ -494,7 +494,7 @@
 		.p2align 3,,7		\n\
 	5:"::"g"(src), "g"(dst), "g"(width):"%eax", "%ecx", "%esi", "%edi")
 
-#elif defined(__MSC__)
+#elif defined(_MSC_VER)
 
 #define MMX_RESET() __asm { emms }
 
@@ -974,7 +974,7 @@ extern void MMX_DSTLINE4(FxU32 *src, FxU32 *dst, FxU32 width);
 		.p2align 3,,7		\n\
 	5:"::"g"(src), "g"(dst), "g"(width):"%eax", "%ecx", "%esi", "%edi")
 
-#elif defined(__MSC__)
+#elif defined(_MSC_VER)
 
 #define FPU_SRCLINE(src, dst, length) __asm {\
 		__asm mov	ecx, length	\

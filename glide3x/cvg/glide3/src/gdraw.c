@@ -989,7 +989,7 @@ _grDrawTriangles_Default(FxI32 mode, FxI32 count, void *pointers)
   else
     stride = sizeof(float *) / sizeof (float);
 
-#if defined(__MSC__)
+#if defined(_MSC_VER)
   {
     _asm {
       mov    eax, dword ptr count;
