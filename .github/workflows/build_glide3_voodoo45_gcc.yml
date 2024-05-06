@@ -1,4 +1,4 @@
-name: Build Glide3x for Voodoo3/4/5 Library
+name: Build Glide3x for Voodoo3/4/5 Library (GCC)
 
 on:
   push:
@@ -7,22 +7,18 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-    # The CMake configure and build commands are platform agnostic and should work equally
-    # well on Windows or Mac.  You can convert this to a matrix build if you need
-    # cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  build_gcc:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: [Debug, Release]
     defaults:
       run:
         working-directory: "glide3x/h5"
     container:
       image: 'danaozhong/3dfx_glide_dev_env_linux_x64:latest'
-      
-    env:
-      # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-      BUILD_TYPE: Debug
-  
+    
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -62,34 +58,34 @@ jobs:
       run: |
         mkdir bin_x64
         cd bin_x64
-        cmake ..
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} ..
         cmake --build .
         
     - name: Generate Glide3x Dynamic Link Library (Linux, x32)
       run: |
         mkdir bin_x32
         cd bin_x32
-        cmake -DBUILD_32BIT=ON ..
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DBUILD_32BIT=ON ..
         cmake --build .
         
-    - name: Generate Glide3x Dynamic Link Library (Windows, x64)
+    - name: Generate Glide3x Dynamic Link Library (Windows, GCC cross compile), x64)
       run: |
         mkdir bin_win_x64
         cd bin_win_x64
-        cmake -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_64.cmake -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_64.cmake -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
         cmake --build .
 
-    - name: Generate Glide3x Dynamic Link Library (Windows, x32)
+    - name: Generate Glide3x Dynamic Link Library (Windows, GCC cross compile), x32)
       run: |
         mkdir bin_win_x32
         cd bin_win_x32
-        cmake -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_32.cmake -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
+        cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DCMAKE_TOOLCHAIN_FILE=mingw-w64-x86_32.cmake -DCMAKE_INSTALL_PREFIX=../prefix-64 ..
         cmake --build .
         
     - name: Upload Built Glide3x Library
       uses: actions/upload-artifact@v2
       with:
-        name: glide3x Voodo345
+        name: gcc_glide3x_voodoo345_${{ matrix.build_type }}
         path: |
             glide3x/h5/bin_x32/*.so
             glide3x/h5/bin_x64/*.so

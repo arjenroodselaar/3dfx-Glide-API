@@ -220,18 +220,19 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     #-DGL_MMX
     #-DGL_SSE
     #-DGL_SSE2
-    -DGL_X86
-
-    # Do not use the ASM routines, but the C triangle setup routines instead
-    -DGLIDE_USE_C_TRISETUP
+    #-DGL_X86
 )
 
 
 if (${BUILD_32BIT})
-
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
+        -DGL_X86
+    )
 else()
     target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
         -DGLIDE_BUILD_64BIT
+        # Do not use the ASM routines, but the C triangle setup routines instead
+        -DGLIDE_USE_C_TRISETUP
     )
 
 endif()

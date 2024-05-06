@@ -1,0 +1,78 @@
+name: Build Glide3x for Voodoo3/4/5 Library (MSVC)
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_msvc:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: [Debug, Release]
+    defaults:
+      run:
+        working-directory: "glide3x/h5"
+
+    steps:
+    - uses: ilammy/setup-nasm@v1
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Create Artifact Directory
+      run: |
+        mkdir ${{ github.workspace }}/artifacts
+        
+    - name: Generate FXGasm Tool
+      working-directory: "glide3x/h5/glide3/src/"
+      run: |
+        mkdir fxgasm_tool/bin
+        cd fxgasm_tool/bin
+        cmake -DCMAKE_GENERATOR_PLATFORM=Win32 ..
+        cmake --build .
+        
+    - name: Generate Header Files
+      working-directory: "glide3x/h5/glide3/src/"
+      run: |
+        ./fxgasm_tool/bin/Debug/fxgasm.exe -inline > fxinline.h
+        ./fxgasm_tool/bin/Debug/fxgasm.exe -hex > fxgasm.h
+
+    - name: Generate Fx Build Number Tool
+      working-directory: "glide3x/h5/glide3/src/"
+      run: |
+        mkdir fxbldno_tool/bin
+        cd fxbldno_tool/bin
+        cmake -DCMAKE_GENERATOR_PLATFORM=Win32 ..
+        cmake --build .
+        
+    - name: Generate Build Number Header Files
+      working-directory: "glide3x/h5/glide3/src/"
+      run: |
+        ./fxbldno_tool/bin/Debug/fxbldno.exe  > fxbldno.h
+
+    - name: Generate Glide3x Dynamic Link Library (Windows, x64)
+      run: |
+        mkdir bin_win_x64
+        cd bin_win_x64
+        cmake -DCMAKE_GENERATOR_PLATFORM=Win32 ..
+        cmake --build . --config ${{ matrix.build_type }}
+
+    - name: Generate Glide3x Dynamic Link Library (Windows, x32)
+      run: |
+        mkdir bin_win_x32
+        cd bin_win_x32
+        cmake -DCMAKE_GENERATOR_PLATFORM=Win32 ..
+        cmake --build . --config ${{ matrix.build_type }}
+        
+    - name: Upload Built Glide3x Library
+      uses: actions/upload-artifact@v2
+      with:
+        name: msvc_glide3x_voodoo345_${{ matrix.build_type }}
+        path: |
+            glide3x/h5/bin_win_x32/Release/*.dll
+            glide3x/h5/bin_win_x32/Debug/*.dll
+            glide3x/h5/bin_win_x64/Release/*.dll
+            glide3x/h5/bin_win_x64/Debug/*.dll

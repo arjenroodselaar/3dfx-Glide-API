@@ -4,6 +4,14 @@ This is the source code to 3Dfx Glide for Voodoo graphics accelerators. It's for
 
 The source is licensed under 3DFX GLIDE Source Code General Public License.
 
+## CI Status
+![win-glide3-vodoo345-msvc-build](https://github.com/Danaozhong/3dfx-Glide-API/actions/workflows/build_glide3_voodoo45_msvc.yml/badge.svg)
+![win-glide3-vodoo345-gcc-build](https://github.com/Danaozhong/3dfx-Glide-API/actions/workflows/build_glide3_voodoo45_gcc.yml/badge.svg)
+![win-glide3-vodoo2-gcc-build](https://github.com/Danaozhong/3dfx-Glide-API/actions/workflows/build_glide3_voodoo2.yml/badge.svg)
+![win-glide2-vodoo2-gcc-build](https://github.com/Danaozhong/3dfx-Glide-API/actions/workflows/build_glide2_voodoo3.yml/badge.svg)
+![win-glide2-vodoo2-gcc-build](https://github.com/Danaozhong/3dfx-Glide-API/actions/workflows/build_glide2_voodoo2.yml/badge.svg)
+![linux-glide2-vodoo2-gcc-build](https://github.com/Danaozhong/3dfx-Glide-API/actions/workflows/build_glide2_linux.yml/badge.svg)
+
 ## Motivation
 
 Although 3dfx disappeared from the marked in 2000, there is still a large community of enthusiasts that enjoy using 3dfx video cards up to this day.
@@ -13,7 +21,7 @@ The Glide API is, similar to OpenGL/Direct3D, a 3D API. It is used by many old-s
 
 This project is a port of the Open-Source Linux Glide libraries, and supports cross-platform builds for Linux and Windows, both x86 and x64.
 
-The toolchain is ported to CMake to simplify cross-platform builds, and get rid of a large set of hard to use makefiles.
+The toolchain is ported to CMake to simplify cross-platform builds, and get rid of a large set of hard-to-use makefiles.
 
 ## How to Build?
 The libraries are tested under Linux, using the mingw-w64 cross-platform compiler. Visual Studio builds might also work, but are currently not tested in the Github Action CI environment.
@@ -29,7 +37,7 @@ The simplest way to build the libraries is to use the provided docker container,
 
 ### Build Example (Windows, Visual Studio)
 
-Let's build the Glide3 DLL for Voodo3/4/5 using Visual Studio.
+Let's build the Glide3 DLL for Voodoo3/4/5 using Visual Studio.
 
 Go to the Glide3 directory:
 ```ps1
