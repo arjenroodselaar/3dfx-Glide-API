@@ -1,6 +1,9 @@
 Glide3x (dec-2004):
 ~~~~~~~~~~~~~~~~~~~
 
+2024-05-06 Daonaozhong - this document is outdated, the build has been ported to CMake.
+
+
 sst1:	Voodoo Graphics XOR Voodoo Rush
 	Maintainers: Daniel Borca
 
