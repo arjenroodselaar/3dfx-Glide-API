@@ -36,8 +36,8 @@ jobs:
     - name: Generate Header Files
       working-directory: "glide3x/h5/glide3/src/"
       run: |
-        ./fxgasm_tool/bin/fxgasm.exe -inline > fxinline.h
-        ./fxgasm_tool/bin/fxgasm.exe -hex > fxgasm.h
+        ./fxgasm_tool/bin/Debug/fxgasm.exe -inline > fxinline.h
+        ./fxgasm_tool/bin/Debug/fxgasm.exe -hex > fxgasm.h
 
     - name: Generate Fx Build Number Tool
       working-directory: "glide3x/h5/glide3/src/"
@@ -50,7 +50,7 @@ jobs:
     - name: Generate Build Number Header Files
       working-directory: "glide3x/h5/glide3/src/"
       run: |
-        ./fxbldno_tool/bin/fxbldno  > fxbldno.h
+        ./fxbldno_tool/bin/Debug/fxbldno.exe  > fxbldno.h
 
     - name: Generate Glide3x Dynamic Link Library (Windows, x64)
       run: |
