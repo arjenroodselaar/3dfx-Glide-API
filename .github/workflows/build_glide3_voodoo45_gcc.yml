@@ -1,4 +1,4 @@
-name: Build Glide3x for Voodoo3/4/5 Library
+name: Build Glide3x for Voodoo3/4/5 Library (GCC)
 
 on:
   push:
