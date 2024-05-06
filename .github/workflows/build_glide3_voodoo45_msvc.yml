@@ -72,6 +72,7 @@ jobs:
       with:
         name: msvc_glide3x_voodoo345_${{ matrix.build_type }}
         path: |
-            glide3x/h5/bin_win_x64/*.dll
-            glide3x/h5/bin_win_x32/*.dll
-        
+            glide3x/h5/bin_win_x32/Release/*.dll
+            glide3x/h5/bin_win_x32/Debug/*.dll
+            glide3x/h5/bin_win_x64/Release/*.dll
+            glide3x/h5/bin_win_x64/Debug/*.dll
