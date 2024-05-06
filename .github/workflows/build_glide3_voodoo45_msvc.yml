@@ -18,6 +18,7 @@ jobs:
         working-directory: "glide3x/h5"
 
     steps:
+    - uses: ilammy/setup-nasm@v1
     - name: Checkout
       uses: actions/checkout@v2
 
