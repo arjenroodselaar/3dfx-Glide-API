@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:25.04
 
 LABEL maintainer="Clemens Zangl" \
       description="Docker file to build 3dfx Glide API" \
