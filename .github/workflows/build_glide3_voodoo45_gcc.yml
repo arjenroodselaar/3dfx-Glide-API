@@ -21,7 +21,7 @@ jobs:
     
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Create Artifact Directory
       run: |
@@ -83,7 +83,7 @@ jobs:
         cmake --build .
         
     - name: Upload Built Glide3x Library
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: gcc_glide3x_voodoo345_${{ matrix.build_type }}
         path: |

@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: ilammy/setup-nasm@v1
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Create Artifact Directory
       run: |
@@ -68,7 +68,7 @@ jobs:
         cmake --build . --config ${{ matrix.build_type }}
         
     - name: Upload Built Glide3x Library
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: msvc_glide3x_voodoo345_${{ matrix.build_type }}
         path: |
