@@ -1,6 +1,5 @@
 #ifndef CPUID_H_included
 #define CPUID_H_included
-#if GL_X86
 
 #define _CPU_HAS_CPUID		0xffff
 #define _CPU_FEATURE_MMX	0x0001
@@ -21,5 +20,4 @@ typedef struct _processor_info {
 
 int _cpuid (_p_info *);
 
-#endif
 #endif

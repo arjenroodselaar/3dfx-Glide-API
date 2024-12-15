@@ -7,6 +7,9 @@ OPTION(USE_DRI "no idea what DRI mode stands for" OFF)
 OPTION(USE_DGA "no idea what DRI mode stands for" OFF)
 OPTION(EMBED_TEXUS2 "Embed Texus2 functions into Glide3" ON)
 
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Set the configuration for the assembler
 if (${BUILD_32BIT})
     if(MSVC)
