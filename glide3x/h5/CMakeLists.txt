@@ -1,101 +1,51 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
+set (GLIDE_H5_DIR ${CMAKE_SOURCE_DIR}/glide3x/h5)
 
-PROJECT(Glide3x VERSION 1.0 DESCRIPTION "Glide3x API for Voodoo3/4/5" LANGUAGES C ASM_NASM)
+set (CINIT_DIR ${GLIDE_H5_DIR}/cinit)
 
-OPTION(BUILD_32BIT "Build for 32-bit targets, otherwise x64" OFF)
-OPTION(USE_DRI "no idea what DRI mode stands for" OFF)
-OPTION(USE_DGA "no idea what DRI mode stands for" OFF)
-OPTION(EMBED_TEXUS2 "Embed Texus2 functions into Glide3" ON)
-
-# Set the configuration for the assembler
-if (${BUILD_32BIT})
-    if(MSVC)
-        # Nothing to do - MSVC supports building 32bit using a different cmake invokation
-    else()
-        # Set this flag for the compiler and linker
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-        set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -m32")
-    endif()
-        
-    # tell the assembler to generate 32 bit files
-    if (WIN32)
-        set(CMAKE_ASM_NASM_OBJECT_FORMAT win32)
-    else()
-        set(CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
-    endif()
-else()
-    if (WIN32)
-        set(CMAKE_ASM_NASM_OBJECT_FORMAT win64)
-    else()
-        set(CMAKE_ASM_NASM_OBJECT_FORMAT elf64)
-    endif()
-endif()
-
-if (WIN32)
-    set(CMAKE_ASM_NASM_DEFINITIONS ${CMAKE_ASM_NASM_DEFINITIONS}
-        -D_NASM_BUILD_FOR_WIN32
-    )
-else()
-    set(CMAKE_ASM_NASM_DEFINITIONS ${CMAKE_ASM_NASM_DEFINITIONS}
-        -D_NASM_BUILD_FOR_LINUX
-    )
-endif()
-
-
-set(CMAKE_ASM_NASM_COMPILE_OBJECT "<CMAKE_ASM_NASM_COMPILER> <INCLUDES> \
-    <FLAGS> -DGLIDE_PACKED_RGB ${CMAKE_ASM_NASM_DEFINITIONS} -f ${CMAKE_ASM_NASM_OBJECT_FORMAT} -o <OBJECT> <SOURCE>")
-    
-
-set (NEWPCI_LIB_DIR ${CMAKE_SOURCE_DIR}/../../swlibs/newpci/pcilib)
-set (FXMISC_DIR ${CMAKE_SOURCE_DIR}/../../swlibs/fxmisc)
-set (CINIT_DIR ${CMAKE_SOURCE_DIR}/cinit)
-
-set (MINIHWC_DIR ${CMAKE_SOURCE_DIR}/minihwc)
-set (TEXUS2_DIR ${CMAKE_SOURCE_DIR}/../../swlibs/texus2/lib)
+set (MINIHWC_DIR ${GLIDE_H5_DIR}/minihwc)
 
 set(GLIDE_SOURCES 
-    ${CMAKE_SOURCE_DIR}/glide3/src/fifo.c
-    ${CMAKE_SOURCE_DIR}/glide3/src/distate.c
-    ${CMAKE_SOURCE_DIR}/glide3/src/gstrip.c
-    ${CMAKE_SOURCE_DIR}/glide3/src/distrip.c
-    ${CMAKE_SOURCE_DIR}/glide3/src/diget.c
-    ${CMAKE_SOURCE_DIR}/glide3/src/gsplash.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/g3df.c  
-    ${CMAKE_SOURCE_DIR}/glide3/src/gu.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/gpci.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/diglide.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/disst.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/ditex.c 
+    ${GLIDE_H5_DIR}/glide3/src/fifo.c
+    ${GLIDE_H5_DIR}/glide3/src/distate.c
+    ${GLIDE_H5_DIR}/glide3/src/gstrip.c
+    ${GLIDE_H5_DIR}/glide3/src/distrip.c
+    ${GLIDE_H5_DIR}/glide3/src/diget.c
+    ${GLIDE_H5_DIR}/glide3/src/gsplash.c 
+    ${GLIDE_H5_DIR}/glide3/src/g3df.c  
+    ${GLIDE_H5_DIR}/glide3/src/gu.c 
+    ${GLIDE_H5_DIR}/glide3/src/gpci.c 
+    ${GLIDE_H5_DIR}/glide3/src/diglide.c 
+    ${GLIDE_H5_DIR}/glide3/src/disst.c 
+    ${GLIDE_H5_DIR}/glide3/src/ditex.c 
 
-    ${CMAKE_SOURCE_DIR}/glide3/src/gbanner.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/gerror.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/gaa.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/gdraw.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/gglide.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/glfb.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/gsst.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/gtex.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/gtexdl.c 
-    #${CMAKE_SOURCE_DIR}/glide3/src/gutex.c 
-    ${CMAKE_SOURCE_DIR}/glide3/src/xtexdl_def.c
-    #${CMAKE_SOURCE_DIR}/glide3/src/cpudtect_stubs.c
-    ${CMAKE_SOURCE_DIR}/glide3/src/gthread.c
+    ${GLIDE_H5_DIR}/glide3/src/gbanner.c 
+    ${GLIDE_H5_DIR}/glide3/src/gerror.c 
+    ${GLIDE_H5_DIR}/glide3/src/gaa.c 
+    ${GLIDE_H5_DIR}/glide3/src/gdraw.c 
+    ${GLIDE_H5_DIR}/glide3/src/gglide.c 
+    ${GLIDE_H5_DIR}/glide3/src/glfb.c 
+    ${GLIDE_H5_DIR}/glide3/src/gsst.c 
+    ${GLIDE_H5_DIR}/glide3/src/gtex.c 
+    ${GLIDE_H5_DIR}/glide3/src/gtexdl.c 
+    #${GLIDE_H5_DIR}/glide3/src/gutex.c 
+    ${GLIDE_H5_DIR}/glide3/src/xtexdl_def.c
+    #${GLIDE_H5_DIR}/glide3/src/cpudtect_stubs.c
+    ${GLIDE_H5_DIR}/glide3/src/gthread.c
 )
 
 
 
 set(GLIDE_SOURCES ${GLIDE_SOURCES} 
     # We always use the C routines for drawing triangles, never the asm or 3dnow ones
-    ${CMAKE_SOURCE_DIR}/glide3/src/gxdraw.c
+    ${GLIDE_H5_DIR}/glide3/src/gxdraw.c
 )
 
 # platform specific compile files
 if(WIN32)
     # Windows build
     set(GLIDE_SOURCES ${GLIDE_SOURCES}
-        ${CMAKE_SOURCE_DIR}/glide3/src/gsfc.c
-        ${CMAKE_SOURCE_DIR}/glide3/src/winsurf.c
+        ${GLIDE_H5_DIR}/glide3/src/gsfc.c
+        ${GLIDE_H5_DIR}/glide3/src/winsurf.c
     )
         
     set(GLIDE_OUTSIDE_SOURCES ${GLIDE_OUTSIDE_SOURCES}
@@ -112,10 +62,7 @@ if(WIN32)
     endif()
 else()
     # Linux build
-    set(GLIDE_OUTSIDE_SOURCES ${GLIDE_OUTSIDE_SOURCES}
-        ${NEWPCI_LIB_DIR}/fxpci.c
-        ${NEWPCI_LIB_DIR}/fxlinux.c
-        
+    set(GLIDE_OUTSIDE_SOURCES ${GLIDE_OUTSIDE_SOURCES}       
         ${MINIHWC_DIR}/hwcio.c
         ${MINIHWC_DIR}/gdebug.c
         
@@ -139,52 +86,32 @@ else()
     endif()
 endif()
 
-if (${EMBED_TEXUS2})
-    set (TEXUS_SOURCES
-        ${TEXUS2_DIR}/texuslib.c
-        ${TEXUS2_DIR}/clamp.c
-        ${TEXUS2_DIR}/read.c
-        ${TEXUS2_DIR}/resample.c
-        ${TEXUS2_DIR}/mipmap.c
-        ${TEXUS2_DIR}/quantize.c
-        ${TEXUS2_DIR}/ncc.c
-        ${TEXUS2_DIR}/nccnnet.c
-        ${TEXUS2_DIR}/pal256.c
-        ${TEXUS2_DIR}/pal6666.c
-        ${TEXUS2_DIR}/dequant.c
-        ${TEXUS2_DIR}/view.c
-        ${TEXUS2_DIR}/util.c
-        ${TEXUS2_DIR}/diffuse.c
-        ${TEXUS2_DIR}/write.c
-        ${TEXUS2_DIR}/tga.c
-        ${TEXUS2_DIR}/3df.c
-        ${TEXUS2_DIR}/ppm.c
-        ${TEXUS2_DIR}/rgt.c
-        ${TEXUS2_DIR}/txs.c
-        ${TEXUS2_DIR}/codec.c
-        ${TEXUS2_DIR}/eigen.c
-        ${TEXUS2_DIR}/bitcoder.c
-    )
-endif()
+
 
 # Create a shared library 
 add_library(${CMAKE_PROJECT_NAME} SHARED 
     ${GLIDE_SOURCES}
     ${GLIDE_OUTSIDE_SOURCES}
     ${GLIDE_ASM_SOURCES}
-    ${TEXUS_SOURCES}
     )
 
 target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
-    ${CMAKE_SOURCE_DIR}/glide3/src
-    ${CMAKE_SOURCE_DIR}/incsrc
-    ${CMAKE_SOURCE_DIR}/init
-    ${CMAKE_SOURCE_DIR}/minihwc
-    ${CMAKE_SOURCE_DIR}/../../swlibs/fxmisc
-    ${CMAKE_SOURCE_DIR}/../../swlibs/newpci/pcilib
-    ${CMAKE_SOURCE_DIR}/../../swlibs/fxmemmap
+    ${GLIDE_H5_DIR}/glide3/src
+    ${GLIDE_H5_DIR}/incsrc
+    ${GLIDE_H5_DIR}/init
+    ${GLIDE_H5_DIR}/minihwc
     ${CINIT_DIR}
 )
+
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC
+    pcilib
+)
+
+if (${EMBED_TEXUS2})
+    target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC
+        texus2
+    )
+endif()
 
 #if(MSVC)
 #  # disable all warnings for now (too many)

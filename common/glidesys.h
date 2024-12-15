@@ -17,14 +17,15 @@
 ** 
 ** COPYRIGHT 3DFX INTERACTIVE, INC. 1999, ALL RIGHTS RESERVED
 **
-** $Log: 
-**  3    3dfx      1.0.1.0.1.0 10/11/00 Brent           Forced check in to enforce
-**       branching.
-**  2    3dfx      1.0.1.0     06/20/00 Joseph Kain     Changes to support the
-**       Napalm Glide open source release.  Changes include cleaned up offensive
-**       comments and new legal headers.
-**  1    3dfx      1.0         09/11/99 StarTeam VTS Administrator 
-** $
+** Revision 1.2  2000/02/15 22:35:59  joseph
+** Changes to support FreeBSD (patch submitted by Doug Rabson)
+**
+** Revision 1.1.1.1  1999/11/24 21:44:57  joseph
+** Initial checkin for SourceForge
+**
+** 
+** 4     4/06/99 3:54p Dow
+** Alt tab again.
 ** 
 ** 4     11/05/98 11:18a Russp
 ** Fix GLIDE_NUM_TMU error check (change "&&" to "||")
@@ -32,7 +33,6 @@
 ** 3     7/24/98 1:41p Hohn
 ** 
 ** 2     6/15/98 10:50a Peter
-** made csim compile time option
  * 
  * 1     1/16/98 4:29p Atai
  * create glide 3 src
@@ -77,9 +77,7 @@ n** -----------------------------------------------------------------------
 #define GLIDE_OS_OS2            0x10
 #define GLIDE_OS_OTHER          0x40 /* For Proprietary Arcade HW */
 
-/* Sim vs. Hardware is stored in bits [7:8] */
 #define GLIDE_SST_SHIFT         7
-#define GLIDE_SST_SIM           (0x1 << GLIDE_SST_SHIFT)
 #define GLIDE_SST_HW            (0x2 << GLIDE_SST_SHIFT)
 
 /* Hardware Type is stored in bits [9:13] */
@@ -87,7 +85,6 @@ n** -----------------------------------------------------------------------
 #define GLIDE_HW_SST1           (0x1 << GLIDE_HW_SHIFT)
 #define GLIDE_HW_SST96          (0x2 << GLIDE_HW_SHIFT)
 #define GLIDE_HW_H3             (0x4 << GLIDE_HW_SHIFT)
-#define GLIDE_HW_SST2           (0x8 << GLIDE_HW_SHIFT)
 #define GLIDE_HW_CVG            (0x10 << GLIDE_HW_SHIFT)
 
 /*
@@ -108,8 +105,7 @@ n** -----------------------------------------------------------------------
 #endif
 
 /* Check for OS */
-#if defined(__IRIX__) || defined(__sparc__) || defined(__linux__) || \
-	defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
+#if defined(__IRIX__) || defined(__sparc__) || defined(__linux__) || defined(__FreeBSD__)
 #  define GLIDE_OS        GLIDE_OS_UNIX
 #elif defined(__DOS__) || defined(__MSDOS__)
 #  define GLIDE_OS        GLIDE_OS_DOS32
@@ -121,20 +117,14 @@ n** -----------------------------------------------------------------------
 #error "Unknown OS"
 #endif
 
-/* Check for Simulator vs. Hardware */
-#if HAL_CSIM || HWC_CSIM
-#  define GLIDE_SST       GLIDE_SST_SIM
-#else
-#  define GLIDE_SST       GLIDE_SST_HW
-#endif
+#define GLIDE_SST       GLIDE_SST_HW
+
 
 /* Check for type of hardware */
 #ifdef SST96
 #  define GLIDE_HW        GLIDE_HW_SST96
 #elif defined(H3)
 #  define GLIDE_HW        GLIDE_HW_H3
-#elif defined(SST2)
-#  define GLIDE_HW        GLIDE_HW_SST2
 #elif defined(CVG)
 #  define GLIDE_HW        GLIDE_HW_CVG
 #else /* Default to SST1 */

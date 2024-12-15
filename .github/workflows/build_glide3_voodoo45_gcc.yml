@@ -13,9 +13,6 @@ jobs:
       fail-fast: false
       matrix:
         build_type: [Debug, Release]
-    defaults:
-      run:
-        working-directory: "glide3x/h5"
     container:
       image: 'danaozhong/3dfx_glide_dev_env_linux_x64:latest'
     
@@ -87,8 +84,8 @@ jobs:
       with:
         name: gcc_glide3x_voodoo345_${{ matrix.build_type }}
         path: |
-            glide3x/h5/bin_x32/*.so
-            glide3x/h5/bin_x64/*.so
-            glide3x/h5/bin_win_x64/*.dll
-            glide3x/h5/bin_win_x32/*.dll
+            bin_x32/glide3x/h5/*.so
+            bin_x64/glide3x/h5/*.so
+            bin_win_x64/glide3x/h5/*.dll
+            bin_win_x32/glide3x/h5/*.dll
         

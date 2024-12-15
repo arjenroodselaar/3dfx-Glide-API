@@ -145,7 +145,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC
     #-G6 
     #-O2 
     #-DGL_MMX do not use any assembler optimization, just let the compiler figure out what is the fastest 
-    -DGL_X86
+    #-DGL_X86
     #-DGL_AMD3D
     # For the assembler environment
     #-DXOS XOS_WIN32

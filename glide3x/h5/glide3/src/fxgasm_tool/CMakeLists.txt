@@ -2,7 +2,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 PROJECT(fxgasm VERSION 1.0 DESCRIPTION "Glide3x FXGASM Tool for Voodoo3/4/5" LANGUAGES C)
 
-
 # Create an executable with the main
 add_executable(${CMAKE_PROJECT_NAME} src/fxgasm.c)
 
@@ -16,6 +15,7 @@ target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC
     ${CMAKE_SOURCE_DIR}/../../../../../swlibs/fxmisc
     ${CMAKE_SOURCE_DIR}/../../../../../swlibs/newpci/pcilib
     ${CMAKE_SOURCE_DIR}/../../../../../swlibs/fxmemmap
+    ${CMAKE_SOURCE_DIR}/../../../../../common
 )
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC

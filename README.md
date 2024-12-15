@@ -54,7 +54,7 @@ Create a binary directory, and generate and build the tool.
 ```ps1
 mkdir bin_win32
 cd bin_win32
-cmake --DBUILD_32BIT=ON  -G "Visual Studio 16 2019" -A Win32 ..
+cmake -DBUILD_32BIT=ON -A Win32 ..
 cmake --build .
 ```
 
@@ -76,7 +76,7 @@ cd bin_win32
 
 Generate project, build, generate header files... 
 ```ps1
-cmake --DBUILD_32BIT=ON  -G "Visual Studio 16 2019" -A Win32 ..
+cmake -DBUILD_32BIT=ON -A Win32 ..
 cmake --build .
 cd ../..
 ./fxbldno_tool/bin_win32/Debug/fxbldno > fxbldno.h
@@ -91,7 +91,7 @@ cd bin_win32
 ```
 Similar to the steps before, generate your Visual Studio solution, and build the DLL.
 ```ps1
-cmake --DBUILD_32BIT=ON  -G "Visual Studio 16 2019" -A Win32 ..
+cmake -DCMAKE_GENERATOR_PLATFORM=Win32 ..
 cmake --build .
 
 ```
