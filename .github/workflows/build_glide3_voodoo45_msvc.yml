@@ -13,9 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         build_type: [Debug, Release]
-    defaults:
-      run:
-        working-directory: "glide3x/h5"
+
 
     steps:
     - uses: ilammy/setup-nasm@v1
@@ -72,7 +70,7 @@ jobs:
       with:
         name: msvc_glide3x_voodoo345_${{ matrix.build_type }}
         path: |
-            glide3x/h5/bin_win_x32/Release/*.dll
-            glide3x/h5/bin_win_x32/Debug/*.dll
-            glide3x/h5/bin_win_x64/Release/*.dll
-            glide3x/h5/bin_win_x64/Debug/*.dll
+            bin_win_x32/Release/glide3x/h5/*.dll
+            bin_win_x32/Debug/glide3x/h5/*.dll
+            bin_win_x64/Release/glide3x/h5/*.dll
+            bin_win_x64/Debug/glide3x/h5/*.dll
