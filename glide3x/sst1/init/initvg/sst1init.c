@@ -217,8 +217,8 @@ FX_EXPORT FxU32 * FX_CSTYLE sst1InitMapBoard(FxU32 BoardNumber)
 #endif /* __WIN32__ */
                     exit(1);
                 }
-                sst1BoardInfo[j].virtAddr = (FxU32 *) NULL;
-                sst1BoardInfo[j].physAddr = (FxU32) NULL;
+                sst1BoardInfo[j].virtAddr = (FxU32 *)NULL;
+                sst1BoardInfo[j].physAddr = (FxU32)(unsigned long)NULL;
                 sst1BoardInfo[j].deviceNumber = 0xdead;
                 sst1BoardInfo[j].numBoardInsystem = 0xdead;
                 sst1BoardInfo[j].fbiRevision = 0xdead;
@@ -234,8 +234,8 @@ FX_EXPORT FxU32 * FX_CSTYLE sst1InitMapBoard(FxU32 BoardNumber)
     if(!(sst = sst1BoardInfo[BoardNumber].virtAddr))
         return (NULL);
 
-    INIT_PRINTF(("sst1InitMapBoard(): vAddr:0x%x pAddr:0x%x Dev:0x%x Board:%d\n",
-        (FxU32) sst1BoardInfo[BoardNumber].virtAddr,
+    INIT_PRINTF(("sst1InitMapBoard(): vAddr:%p pAddr:0x%x Dev:0x%x Board:%d\n",
+        sst1BoardInfo[BoardNumber].virtAddr,
         (FxU32) sst1BoardInfo[BoardNumber].physAddr,
         (FxU32) sst1BoardInfo[BoardNumber].deviceNumber, BoardNumber));
 

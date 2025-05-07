@@ -215,11 +215,11 @@ static FxU32 sense(FxU32 *sstbase, sst1DeviceInfoStruct *info, FxU32 tmu,
     sst1InitIdle(sstbase);
 
     ISET(sst->texBaseAddr, 0x200000>>3);	/* set to 2 MB */
-    texAddr[0] = SENSE2;		/* write a random value */
+    ISET(texAddr[0], SENSE2);		/* write a random value */
     ISET(sst->texBaseAddr, 0x100000>>3);	/* set to 1 MB */
-    texAddr[0] = SENSE1;		/* write a random value */
+    ISET(texAddr[0], SENSE1);		/* write a random value */
     ISET(sst->texBaseAddr, 0x000000>>3);	/* set to 0 MB */
-    texAddr[0] = SENSE0;		/* write a random value */
+    ISET(texAddr[0], SENSE0);		/* write a random value */
 
     ISET(sst->texBaseAddr, mem>>3);		/* reset to 2 MB */
     drawTriangle(sst,0,0,4);		/* draw a 4x4 right triangle */

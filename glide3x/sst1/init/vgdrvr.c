@@ -43,7 +43,7 @@ static FxBool setVideo( FxU32                   hWnd,
     static int _h[] = {200,240,256,384,200,350,400,480,600,720,480,256};
 
     FxBool rv;
-    rv = sst1InitVideo( (FxU32*)context->info.hwDep.vgInfo.vgBaseAddr,
+    rv = sst1InitVideo( (FxU32*)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr,
                         sRes,
                         vRefresh, 
                         vidTimings );
@@ -51,15 +51,15 @@ static FxBool setVideo( FxU32                   hWnd,
     if ( !rv ) goto BAIL;
 
     if ( context->info.hwDep.vgInfo.sliDetect ) {
-        rv = sst1InitRegisters((FxU32*)context->info.hwDep.vgInfo.slaveBaseAddr);
+        rv = sst1InitRegisters((FxU32*)(unsigned long)context->info.hwDep.vgInfo.slaveBaseAddr);
         if ( !rv ) goto BAIL;
-        rv = sst1InitVideo( (FxU32*)context->info.hwDep.vgInfo.slaveBaseAddr,
+        rv = sst1InitVideo( (FxU32*)(unsigned long)context->info.hwDep.vgInfo.slaveBaseAddr,
                             sRes,
                             vRefresh, 
                             vidTimings );
         if ( !rv ) goto BAIL;
-        rv = sst1InitSli( (FxU32*)context->info.hwDep.vgInfo.vgBaseAddr,
-                          (FxU32*)context->info.hwDep.vgInfo.slaveBaseAddr );
+        rv = sst1InitSli( (FxU32*)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr,
+                          (FxU32*)(unsigned long)context->info.hwDep.vgInfo.slaveBaseAddr );
         if ( !rv ) goto BAIL;
     }
 
@@ -77,7 +77,7 @@ BAIL:
 }
 
 static void restoreVideo( void ) {
-   sst1InitShutdown( (FxU32*)context->info.hwDep.vgInfo.vgBaseAddr );
+   sst1InitShutdown( (FxU32*)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr );
 }
 
 static FxBool enableTransport( InitFIFOData *info ) {
@@ -85,7 +85,7 @@ static FxBool enableTransport( InitFIFOData *info ) {
     sst1DeviceInfoStruct sstInfo;
 
     if ( info ) {
-        rv = sst1InitGetDeviceInfo( (FxU32*)context->info.hwDep.vgInfo.vgBaseAddr, 
+        rv = sst1InitGetDeviceInfo( (FxU32*)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr,
                                     &sstInfo );
         info->hwDep.vgFIFOData.memFifoStatusLwm = sstInfo.memFifoStatusLwm;
     }
@@ -103,7 +103,7 @@ static /*InitSwapType_t*/ void swapBuffers( FxU32 code ) {
 }
 
 static FxU32 status( void ) {
-  return sst1InitReturnStatus((FxU32 *) context->info.hwDep.vgInfo.vgBaseAddr);
+  return sst1InitReturnStatus((FxU32 *)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr);
 }
 
 static FxBool busy(void) {
@@ -113,7 +113,7 @@ static FxBool busy(void) {
 }
 
 static void idle( void ) {
-  sst1InitIdle((FxU32 *)context->info.hwDep.vgInfo.vgBaseAddr);
+  sst1InitIdle((FxU32 *)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr);
 }
 
 static void *getBufferPtr( InitBuffer_t buffer, int *strideBytes ) {
@@ -132,11 +132,11 @@ static void ioCtl( FxU32 token, void *argument ) {
 static FxBool control( FxU32 code ) {
     switch ( code ) {
     case INIT_CONTROL_DEACTIVATE:
-        sst1InitVgaPassCtrl( (FxU32*)context->info.hwDep.vgInfo.vgBaseAddr,
+        sst1InitVgaPassCtrl((FxU32*)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr,
                              FXTRUE );
         break;
     case INIT_CONTROL_ACTIVATE:
-        sst1InitVgaPassCtrl( (FxU32*)context->info.hwDep.vgInfo.vgBaseAddr,
+        sst1InitVgaPassCtrl((FxU32*)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr,
                              FXFALSE );
         break;
     }
@@ -148,7 +148,7 @@ static FxBool wrapFIFO(InitFIFOData *fd) {
 }
 
 static void sst1gamma( double gamma ) {
-  sst1InitGamma((FxU32 *) context->info.hwDep.vgInfo.vgBaseAddr, gamma);
+  sst1InitGamma((FxU32 *)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr, gamma);
 }
 
 static void sliPciOwner( FxU32 *regbase, FxU32 owner ) {
@@ -156,11 +156,11 @@ static void sliPciOwner( FxU32 *regbase, FxU32 owner ) {
 }
 
 static FxBool gammargb( double r, double g, double b ) {
-  return sst1InitGammaRGB((FxU32 *) context->info.hwDep.vgInfo.vgBaseAddr, r, g, b);
+  return sst1InitGammaRGB((FxU32 *)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr, r, g, b);
 }
 
 static FxBool gammatable( FxU32 nentries, FxU32 *r, FxU32 *g, FxU32 *b ) {
-  return sst1InitGammaTable((FxU32 *) context->info.hwDep.vgInfo.vgBaseAddr, nentries, r, g, b);
+  return sst1InitGammaTable((FxU32 *)(unsigned long)context->info.hwDep.vgInfo.vgBaseAddr, nentries, r, g, b);
 }
 
 static sst1VideoTimingStruct *findvidtiming( GrScreenResolution_t sRes, GrScreenRefresh_t vRefresh) {

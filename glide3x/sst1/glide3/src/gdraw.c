@@ -103,13 +103,12 @@
 #define OUTBOUNDS(a) (OUTBOUNDSX(a) || OUTBOUNDSY(a))
 
 /* access a floating point array with a byte index */
-#define FARRAY(p,i) (*(float *)((i)+(int)(p)))
+#define FARRAY(p,i) (*(float *)((i)+(unsigned long)(p)))
 /* access a byte array with a byte index and convert to float */
 #define FbARRAY(p,i) (float)(((unsigned char *)p)[i])
 
 /*---------------------------------------------------------------------------
   NOTE: by Gary Tarolli
-  
   The following code is very carefully scheduled for MSVC4.2 Version 10.20.6166
   The trick is to schedule operations between PCI writes (GR_SET*).
   This is because PCI writes cannot get off the CPU chip quickly and there
@@ -163,10 +162,21 @@ GR_ENTRY(grDrawLine, void, ( const void *a, const void *b ))
 {
   GR_DCL_GC;
 
+  /*
+  ** The drawing functions require a pointer to an array of pointers
+  ** to (x, y) coordinates. This function relies on function parameters pushed
+  ** right-to-left on the stack causing a and b to implicitly form such an
+  ** array. Unfortunately this assumption does not hold true for the Arm ABIs
+  ** where parameters are pushed left-to-right on the stack. Explicitly store a
+  ** and b in an array before calling the drawing function to get correct
+  ** behavior.
+  */
+  const void *vtx[2] = {a, b};
+
   if (gc->state.grEnableArgs.primitive_smooth_mode & GR_AA_ORDERED_LINES_MASK)
-    _grAADrawLineStrip(GR_VTX_PTR_ARRAY, GR_LINES, 2, (void *)&a);
+    _grAADrawLineStrip(GR_VTX_PTR_ARRAY, GR_LINES, 2, vtx);
   else
-    _grDrawLineStrip(GR_VTX_PTR_ARRAY, GR_LINES, 2, (void *)&a);
+    _grDrawLineStrip(GR_VTX_PTR_ARRAY, GR_LINES, 2, vtx);
 } /* grDrawLine */
 
 /*---------------------------------------------------------------------------

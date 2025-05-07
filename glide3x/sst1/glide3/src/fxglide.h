@@ -1275,7 +1275,7 @@ GWH_INC_WSH;\
       GR_SET( *(FxU32 *)_GlideRoot.packerFixAddress, 0 ); \
     }
 #else
-  #define PACKER_WORKAROUND GR_SET(*(FxU32 *)_GlideRoot.packerFixAddress, 0);
+  #define PACKER_WORKAROUND GR_SET(*(FxU32 *)(unsigned long)_GlideRoot.packerFixAddress, 0);
 #endif
 
   #define PACKER_BUGCHECK(a)\
@@ -1513,8 +1513,8 @@ _grSst96CheckFifoData(void);
 
 #ifdef GLIDE_SANITY_SIZE
 
-#define FIFO_SUB_VAL ((FxU32)gc->fifoData.hwDep.vg96FIFOData.fifoPtr - \
-                      (FxU32)gc->fifoData.hwDep.vg96FIFOData.fifoVirt)
+#define FIFO_SUB_VAL ((unsigned long)gc->fifoData.hwDep.vg96FIFOData.fifoPtr - \
+                      (unsigned long)gc->fifoData.hwDep.vg96FIFOData.fifoVirt)
    
 #define GR_CHECK_SIZE() \
    if(gc->counter != gc->expected_counter) \
@@ -1533,7 +1533,7 @@ _grSst96CheckFifoData(void);
    GDBG_INFO((gc->myLevel, \
               "FIFO: 0x%X 0x%X (0x%X)\n", \
               (n), \
-              (FxU32)gc->fifoData.hwDep.vg96FIFOData.fifoPtr, \
+              (unsigned long)gc->fifoData.hwDep.vg96FIFOData.fifoPtr, \
               FIFO_SUB_VAL)); \
    GDBG_INFO((gc->myLevel, \
               "FIFOSize: 0x%X\n", \

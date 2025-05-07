@@ -665,7 +665,7 @@ GR_ENTRY(grLfbWriteRegion, FxBool, (GrBuffer_t dst_buffer,
     case GR_LFB_SRC_FMT_ZA16:
       dstData = (FxU32*)(((FxU16*)dstData) + dst_x);
       length  = src_width * 2;
-      aligned = !((int)dstData&0x2);
+      aligned = !((unsigned long)dstData&0x2);
       srcJump = src_stride - length;
       dstJump = info.strideInBytes - length;
       if ( aligned ) {
@@ -891,7 +891,7 @@ GR_ENTRY(grLfbReadRegion, FxBool, ( GrBuffer_t src_buffer,
     length   = src_width * 2;
     dstJump  = dst_stride - length;
     srcJump  = info.strideInBytes - length;
-    aligned  = !((int)srcData&0x2);
+    aligned  = !((unsigned long)srcData&0x2);
     odd      = (src_y+src_height) & 0x1;
     
     if ( aligned ) {
@@ -905,8 +905,10 @@ GR_ENTRY(grLfbReadRegion, FxBool, ( GrBuffer_t src_buffer,
             sst1InitSliPciOwner(gc->base_ptr, SST_SLI_SLAVE_OWNPCI);
         }
 
-        while( srcData < end ) 
-          *dstData++ = *srcData++;
+        while( srcData < end ) {
+          *dstData++ = GR_GET(*srcData);
+          ++srcData;
+        }
                 
         if ( ((int)length) & 0x2 ) {
           (*(FxU16*)dstData) = (*(FxU16*)srcData);

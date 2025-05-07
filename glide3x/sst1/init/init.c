@@ -132,9 +132,9 @@ initEnumHardware( InitHWEnumCallback *cb )
                 hwInfo[numDevicesInSystem-1].hwDep.vgInfo.sliDetect ) {
 
               hwInfo[numDevicesInSystem-1].hwDep.vgInfo.slaveBaseAddr =
-                (FxU32)sst1InitMapBoard( numSst1s );
+                (FxU32)(unsigned long)sst1InitMapBoard( numSst1s );
               hwInfo[numDevicesInSystem-1].regs.hwDep.VGRegDesc.slavePtr = 
-                (FxU32*)hwInfo[numDevicesInSystem-1].hwDep.vgInfo.slaveBaseAddr;
+                (FxU32*)(unsigned long)hwInfo[numDevicesInSystem-1].hwDep.vgInfo.slaveBaseAddr;
               numSst1s++;
               continue;
 
@@ -156,7 +156,7 @@ initEnumHardware( InitHWEnumCallback *cb )
 #endif
           sst1InitGetDeviceInfo( base, &info );
 
-          hwInfo[numDevicesInSystem].hwDep.vgInfo.vgBaseAddr = (FxU32) base;
+          hwInfo[numDevicesInSystem].hwDep.vgInfo.vgBaseAddr = (FxU32)(unsigned long)base;
           hwInfo[numDevicesInSystem].hwDep.vgInfo.pfxRev    = info.fbiRevision;
           hwInfo[numDevicesInSystem].hwDep.vgInfo.pfxRam    = info.fbiMemSize;
           hwInfo[numDevicesInSystem].hwDep.vgInfo.nTFX      = info.numberTmus;

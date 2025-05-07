@@ -41,8 +41,8 @@
                         COMMENT; NEWLINE
 
 #define OFFSET(p,o,pname) if (hex) \
-        printf("%s\tequ %08xh\n",pname,((int)&p.o)-(int)&p); \
-    else printf("%s\tequ %10d\n",pname,((int)&p.o)-(int)&p)
+        printf("%s\tequ %08lxh\n",pname,((unsigned long)&p.o)-(unsigned long)&p); \
+    else printf("%s\tequ %10lu\n",pname,((unsigned long)&p.o)-(unsigned long)&p)
 
 #if (GLIDE_PLATFORM & GLIDE_HW_SST96)
 #define HWOFFSET(p, o, pname) if (hex) \
@@ -51,8 +51,8 @@
 #endif /* (GLIDE_PLATFORM & GLIDE_HW_SST96) */
 
 #define OFFSET2(p,o,pname) if (hex) \
-        printf("%s\tequ %08xh\n",pname,((int)&o)-(int)&p); \
-    else printf("%s\tequ %10d\n",pname,((int)&o)-(int)&p)
+        printf("%s\tequ %08lxh\n",pname,((unsigned long)&o)-(unsigned long)&p); \
+    else printf("%s\tequ %10lu\n",pname,((unsigned long)&o)-(unsigned long)&p)
 
 #define SIZEOF(p,pname) if (hex) \
         printf("SIZEOF_%s\tequ %08lxh\n",pname,(unsigned long)sizeof(p)); \

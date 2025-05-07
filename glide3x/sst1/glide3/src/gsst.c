@@ -845,7 +845,7 @@ GR_ENTRY(grSstWinOpen, GrContext_t, (FxU32                   hWnd,
   gc->open = FXTRUE;
   _GlideRoot.windowsInit = FXTRUE; /* to avoid race with grSstControl() */
 
-  rv = (GrContext_t)gc;
+  rv = (GrContext_t)(unsigned long)gc;
 
   /*------------------------------------------------------
     GC Init
@@ -1071,7 +1071,7 @@ GR_ENTRY(grSstWinClose, FxBool, (GrContext_t context))
   GR_BEGIN_NOFIFOCHECK("grSstWinClose",80);
   GDBG_INFO_MORE((gc->myLevel,"()\n"));
 
-  GR_ASSERT((GrContext_t)gc == context);
+  GR_ASSERT((GrContext_t)(unsigned long)gc == context);
 
   if ( (gc != NULL) && gc->open ) {
 #if (GLIDE_PLATFORM & GLIDE_OS_WIN32)

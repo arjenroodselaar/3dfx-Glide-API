@@ -66,12 +66,12 @@
 #include "fxglide.h"
 
 /* access a floating point array with a byte index */
-#define FARRAY(p,i) (*(float *)((i)+(int)(p)))
+#define FARRAY(p,i) (*(float *)((i)+(unsigned long)(p)))
 /* access a byte array with a byte index and convert to float */
 #define FbARRAY(p,i) (float)(((unsigned char *)p)[i])
 
 #define VX(a) *(a)
-#define VY(b) *((float*)(((int)b)+4))
+#define VY(b) *((float*)(((unsigned long)b)+4))
 
 /*
 ** -----------------------------------------------------------------------

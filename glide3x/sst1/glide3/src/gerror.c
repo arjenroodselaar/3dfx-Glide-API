@@ -112,7 +112,7 @@ _grErrorDefaultCallback( const char *s, FxBool fatal )
 {
   if ( fatal )
   {
-    grSstWinClose((GrContext_t)(_GlideRoot.GCs + _GlideRoot.current_sst));
+    grSstWinClose((GrContext_t)((unsigned long)_GlideRoot.GCs + _GlideRoot.current_sst));
     grGlideShutdown();
 
 #if (GLIDE_PLATFORM & GLIDE_HW_SST96) && (GLIDE_PLATFORM & GLIDE_OS_DOS32)    

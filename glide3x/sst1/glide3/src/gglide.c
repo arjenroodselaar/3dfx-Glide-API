@@ -1327,7 +1327,7 @@ GR_ENTRY(grGlideShutdown, void, ( void ))
       
       for( i = 0; i < _GlideRoot.hwConfig.num_sst; i++ ) {
         grSstSelect( i );
-        grSstWinClose((GrContext_t)(_GlideRoot.GCs + i));
+        grSstWinClose((GrContext_t)((unsigned long)_GlideRoot.GCs + i));
       }
       
       initClose();
@@ -2040,7 +2040,7 @@ GR_DDFUNC(_grRebuildDataList, void, ( void ))
   /* NOTE: this is the first */
   if (i & STATE_REQUIRES_W_TMU0) {
     gc->dataList[curTriSize + 0].i     =  packMask;
-    gc->dataList[curTriSize + 0].addr  = (float *)_GlideRoot.packerFixAddress;
+    gc->dataList[curTriSize + 0].addr  = (float *)(unsigned long)_GlideRoot.packerFixAddress;
     gc->dataList[curTriSize + 0].bddr  = 0;
     if (gc->state.vData.q0Info.mode == GR_PARAM_ENABLE)    
       gc->dataList[curTriSize + 1].i     = gc->state.vData.q0Info.offset;
@@ -2059,7 +2059,7 @@ GR_DDFUNC(_grRebuildDataList, void, ( void ))
   /* TMU1 --------------------------------- */
   if (i & STATE_REQUIRES_ST_TMU1) {
     gc->dataList[curTriSize + 0].i     = packMask;
-    gc->dataList[curTriSize + 0].addr  = (float *)_GlideRoot.packerFixAddress;
+    gc->dataList[curTriSize + 0].addr  = (float *)(unsigned long)_GlideRoot.packerFixAddress;
     packerFlag = 0;
     gc->dataList[curTriSize + 0].bddr  = 0;
     gc->dataList[curTriSize + 1].i     = gc->state.vData.st1Info.offset;
@@ -2076,7 +2076,7 @@ GR_DDFUNC(_grRebuildDataList, void, ( void ))
   if (i & STATE_REQUIRES_W_TMU1) {
     if (packerFlag) {
       gc->dataList[curTriSize + 0].i     = packMask;
-      gc->dataList[curTriSize + 0].addr  = (float *)_GlideRoot.packerFixAddress;
+      gc->dataList[curTriSize + 0].addr  = (float *)(unsigned long)_GlideRoot.packerFixAddress;
       gc->dataList[curTriSize + 0].bddr  = 0;
       curTriSize += 1;
     }
@@ -2098,10 +2098,10 @@ GR_DDFUNC(_grRebuildDataList, void, ( void ))
 #endif
   
   /* if last write was not to chip 0 */
-  if ( SST_CHIP_MASK & (FxU32)gc->dataList[curTriSize-1].addr ) {
+  if ( SST_CHIP_MASK & (FxU32)(unsigned long)gc->dataList[curTriSize-1].addr ) {
     /* flag write as a packer bug fix  */
     gc->dataList[curTriSize].i     = packMask; 
-    gc->dataList[curTriSize].addr  = (float *)_GlideRoot.packerFixAddress;
+    gc->dataList[curTriSize].addr  = (float *)(unsigned long)_GlideRoot.packerFixAddress;
     gc->dataList[curTriSize].bddr  = 0;
     curTriSize++;
   }

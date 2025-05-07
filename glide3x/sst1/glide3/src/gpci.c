@@ -230,11 +230,11 @@ _grSstDetectResources(void)
         
         _GlideRoot.hwConfig.SSTs[ctx].type = GR_SSTTYPE_VOODOO;
         
-        _GlideRoot.GCs[ctx].base_ptr  = (FxU32 *)info.hwDep.vgInfo.vgBaseAddr;
-        _GlideRoot.GCs[ctx].reg_ptr   = (FxU32 *)info.hwDep.vgInfo.vgBaseAddr;
+        _GlideRoot.GCs[ctx].base_ptr  = (FxU32 *)(unsigned long)info.hwDep.vgInfo.vgBaseAddr;
+        _GlideRoot.GCs[ctx].reg_ptr   = (FxU32 *)(unsigned long)info.hwDep.vgInfo.vgBaseAddr;
         _GlideRoot.GCs[ctx].lfb_ptr   = (FxU32 *)SST_LFB_ADDRESS(info.hwDep.vgInfo.vgBaseAddr);
         _GlideRoot.GCs[ctx].tex_ptr   = (FxU32 *)SST_TEX_ADDRESS(info.hwDep.vgInfo.vgBaseAddr);
-        _GlideRoot.GCs[ctx].slave_ptr = (FxU32 *)info.hwDep.vgInfo.slaveBaseAddr;
+        _GlideRoot.GCs[ctx].slave_ptr = (FxU32 *)(unsigned long)info.hwDep.vgInfo.slaveBaseAddr;
         _GlideRoot.GCs[ctx].grSstRez  = GR_RESOLUTION_NONE;
 
         _GlideRoot.GCs[ctx].scanline_interleaved = info.hwDep.vgInfo.sliDetect;
@@ -788,10 +788,10 @@ FxU32 GR_CDECL
 _GR_GET(void *addr)
 {
   GR_DCL_GC;
-  FxU32 chip, data, iaddr = (FxU32) addr;
+  FxU32 chip, data, iaddr = (FxU32)(unsigned long)addr;
 
   data = GET(*(FxU32 *)addr);
-  iaddr = iaddr - (FxU32)gc->base_ptr + 0x10000000;
+  iaddr = iaddr - (FxU32)(unsigned long)gc->base_ptr + 0x10000000;
   chip = (iaddr >> 10) & 0xF;
   if (iaddr < 0x10000000) {     /* sanity check */
     GDBG_ERROR("GET","bad address(<chip)=0x%x  data=%d(0x%08x)\n",
@@ -827,9 +827,9 @@ void GR_CDECL
 _GR_SET(void *addr, unsigned long data)
 {
   GR_DCL_GC;
-  FxU32 chip, iaddr = (FxU32) addr;
+  FxU32 chip, iaddr = (FxU32)(unsigned long)addr;
 
-  iaddr = iaddr - (FxU32)gc->base_ptr + 0x10000000;
+  iaddr = iaddr - (FxU32)(unsigned long)gc->base_ptr + 0x10000000;
   if (iaddr < 0x10000000) {       /* sanity check */
     GDBG_ERROR("SET","bad address(<chip)=0x%x  data=%d(0x%08x)\n",
                      iaddr,data,data);
@@ -889,8 +889,8 @@ void GR_CDECL
 _GR_SET16(void *addr, unsigned short data)
 {
   GR_DCL_GC;
-  FxU32 iaddr = (FxU32)addr;
-  iaddr = iaddr - (FxU32)gc->base_ptr + 0x10000000;
+  FxU32 iaddr = (FxU32)(unsigned long)addr;
+  iaddr = iaddr - (FxU32)(unsigned long)gc->base_ptr + 0x10000000;
   GDBG_INFO((120,"       SET16(0x%x,%11d(0x%08x)) 0\tLFB16\n",iaddr,data,data));
   last_addr = 0;
 } /* _GR_SET16 */

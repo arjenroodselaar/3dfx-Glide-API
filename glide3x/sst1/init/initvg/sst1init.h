@@ -475,7 +475,7 @@ typedef struct {
 } sst1VideoTimingStruct;
 
 typedef struct {
-    FxU32 *virtAddr;        /* virtual memory base address */
+    void *virtAddr;        /* virtual memory base address */
     FxU32 physAddr;         /* physical memory base address */
     FxU32 deviceNumber;     /* PCI device number */
     FxU32 vendorID;         /* PCI vendor ID */

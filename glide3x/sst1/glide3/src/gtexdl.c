@@ -322,7 +322,7 @@ GR_ENTRY(grTexDownloadMipMapLevelPartial, FxBool, ( GrChipID_t tmu, FxU32 startA
   /*------------------------------------------------------------
     Compute Physical Write Pointer
     ------------------------------------------------------------*/
-  tmu_baseaddress = (FxU32)gc->tex_ptr;
+  tmu_baseaddress = (FxU32)(unsigned long)gc->tex_ptr;
   tmu_baseaddress += (((FxU32)tmu)<<21) + (((FxU32)thisLod)<<17);
   
   /*------------------------------------------------------------
@@ -358,7 +358,7 @@ GR_ENTRY(grTexDownloadMipMapLevelPartial, FxBool, ( GrChipID_t tmu, FxU32 startA
   P6FENCE;
   _GlideRoot.stats.texBytes += max_s * (max_t-t+1) * 4;
 
-# define SET_TRAM(a,b) GR_SET( *((FxU32 *)(a)) , (b) )
+# define SET_TRAM(a,b) GR_SET( *((FxU32 *)(unsigned long)(a)) , (b) )
   /*------------------------------------------------------------
     Handle 8-bit Textures
     ------------------------------------------------------------*/

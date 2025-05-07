@@ -121,7 +121,7 @@ GR_DIENTRY(grSstSelect, void, ( int which ))
     GDBG_INFO_MORE((gc->myLevel,"(%d)\n",which));
 
     /* GMT: C-simulator recognizes this special address!!! (don't change it)*/
-    _GlideRoot.packerFixAddress  = ( FxU32 ) gc->tex_ptr;
+    _GlideRoot.packerFixAddress  = ( FxU32 )(unsigned long) gc->tex_ptr;
     _GlideRoot.packerFixAddress += ( ( ( FxU32 ) 3 ) << 21 );
     _GlideRoot.packerFixAddress += ( ( ( FxU32 ) 1 ) << 17 );
 
