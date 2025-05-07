@@ -1040,6 +1040,14 @@ typedef struct sstregs {        // THE CHIP
 #endif
 
 // Here are the defines for the hardware
+#ifdef GLIDE_SIM
+#include <fxglidesim.h>
+#define GET(s)          pciRead32GlideSim((void *)&(s))
+#define GET16(s)        pciRead16GlideSim((void *)&(s))
+#define SET(d,s)        pciWrite32GlideSim((void *)&(d),s)
+#define SET16(d,s)      pciWrite32GlideSim((void *)&(d),s)
+#define SETF(d,s)       pciWriteFloatGlideSim((void *)&(d),s)
+#else
 #define GET(s) s
 #define GET16(s) s
 #define SET(d,s) d = s
@@ -1052,6 +1060,7 @@ do { \
   d = uni.u; \
 } while(0)
 */
+#endif
 
 // SET macros for FBI
 #define SET_FBI(d,s)    SET (*(&(d)+0x100),s)

@@ -147,7 +147,8 @@ p6Fence(void);
 #elif defined(__GNUC__) && defined(__alpha__)
 # define P6FENCE asm volatile("mb" ::: "memory");
 #else
-#error "P6 Fencing in-line assembler code needs to be added for this compiler"
+//#error "P6 Fencing in-line assembler code needs to be added for this compiler"
+#  define P6FENCE
 #endif
 
 #ifdef __cplusplus

@@ -515,7 +515,8 @@ _GlideInitEnvironment( void )
 
 
 
-#if defined(GLIDE_DEBUG) && !(GLIDE_PLATFORM & GLIDE_SST_SIM)
+#if defined(GLIDE_DEBUG)
+// && !(GLIDE_PLATFORM & GLIDE_SST_SIM)
 
 /* GMT: tracing utilities */
 
@@ -1079,4 +1080,3 @@ _GR_SET_GW_ENTRY( volatile void *addr, unsigned long data ) {
 }
 
 #endif /* defined( GLIDE_DEBUG) && ( GLIDE_PLATFORM & GLIDE_HW_SST96 ) */
-

@@ -1605,7 +1605,8 @@ _grSst96CheckFifoData(void);
 
 #ifndef GR_ASSERT               
 #if defined(GLIDE_SANITY_ASSERT)
-#  define GR_ASSERT(exp) if (!(exp)) _grAssert(#exp,  __FILE__, __LINE__)
+//#  define GR_ASSERT(exp) if (!(exp)) _grAssert(#exp,  __FILE__, __LINE__)
+#define GR_ASSERT(exp) assert(exp)
 #else
 #  define GR_ASSERT(exp) 
 #endif
@@ -1796,7 +1797,7 @@ if (_GlideRoot.CPUType == 6) {\
 
 #endif /* defined(SST96) */
 
-#if defined(GLIDE_DEBUG) && !(GLIDE_PLATFORM & GLIDE_SST_SIM) && !defined(SST96)
+//#if defined(GLIDE_DEBUG) && !(GLIDE_PLATFORM & GLIDE_SST_SIM) && !defined(SST96)
   /* if building a DEBUG library without the simulator */
   extern FxU32 GR_CDECL _GR_GET(void *);
   extern void GR_CDECL _GR_SET16(void *, unsigned short);
@@ -1807,13 +1808,13 @@ if (_GlideRoot.CPUType == 6) {\
   #define GR_SET(d,s)   {_GR_SET(&(d),s); SET(d,s); GR_INC_SIZE(4);}
   #define GR_SETF(d,s)  {_GR_SETF(&(d),s); SETF(d,s); GR_INC_SIZE(4);}
   #define GR_SET16(d,s) {_GR_SET16(&(d),s); SET16(d,s); GR_INC_SIZE(2);}
-#else
-  /* [dBorca] HACK ALERT!!! Win32 version runs amok without this... */
-  #define GR_GET(s)     GET(s)
-  #define GR_SET(d,s)   {GR_P6FENCE; SET(d,s); GR_INC_SIZE(4);}
-  #define GR_SETF(d,s)  {SETF(d,s); GR_INC_SIZE(4);}
-  #define GR_SET16(d,s) {SET16(d,s); GR_INC_SIZE(2);}
-#endif
+// #else
+//   /* [dBorca] HACK ALERT!!! Win32 version runs amok without this... */
+//   #define GR_GET(s)     GET(s)
+//   #define GR_SET(d,s)   {GR_P6FENCE; SET(d,s); GR_INC_SIZE(4);}
+//   #define GR_SETF(d,s)  {SETF(d,s); GR_INC_SIZE(4);}
+//   #define GR_SET16(d,s) {SET16(d,s); GR_INC_SIZE(2);}
+// #endif
 
 
 
